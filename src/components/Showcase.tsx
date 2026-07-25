@@ -235,12 +235,12 @@ function TechGrid() {
         .sort((a, b) => a.p.z - b.p.z)
         .forEach(({ el, p }, idx) => {
           if (!el) return;
-          const x = p.x * RADIUS + 210 - 36;
-          const y = p.y * RADIUS + 210 - 36;
+          const x = p.x * RADIUS + 210 - 38;
+          const y = p.y * RADIUS + 210 - 38;
           const depth = (p.z + 1) / 2;
-          const opacity = 0.25 + depth * 0.75;
-          const scale = 0.55 + depth * 0.55;
-          el.style.cssText = `position:absolute;left:${x}px;top:${y}px;opacity:${opacity};transform:scale(${scale});z-index:${idx};width:72px;height:72px;`;
+          const opacity = 0.45 + depth * 0.50;
+          const scale = (0.58 + depth * 0.52) * 1.05;
+          el.style.cssText = `position:absolute;left:${x}px;top:${y}px;opacity:${opacity};transform:scale(${scale});z-index:${idx};width:76px;height:76px;`;
         });
 
       rafId.current = requestAnimationFrame(render);
@@ -337,12 +337,12 @@ function TechGrid() {
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
       >
-        {/* Ambient glow */}
+        {/* Ambient glow & backdrop darkener */}
         <div
-          className="absolute inset-0 pointer-events-none"
+          className="absolute inset-0 pointer-events-none rounded-full"
           style={{
             background:
-              "radial-gradient(ellipse at center, rgba(255,255,255,0.03) 0%, transparent 70%)",
+              "radial-gradient(ellipse at center, rgba(12,12,18,0.85) 0%, rgba(0,0,0,0.95) 75%)",
           }}
         />
 
@@ -356,38 +356,42 @@ function TechGrid() {
             <div
               key={tech.name}
               ref={(el) => { if (el) itemEls.current[i] = el; }}
-              style={{ position: "absolute", width: 72, height: 72 }}
+              style={{ position: "absolute", width: 76, height: 76 }}
             >
               <div
-                className="w-full h-full rounded-[18px] flex flex-col items-center justify-center gap-[5px] transition-[all] duration-300 hover:scale-110"
+                className="w-full h-full rounded-[18px] flex flex-col items-center justify-center gap-[7px]"
                 style={{
-                  border: "1px solid rgba(255,255,255,0.08)",
-                  background: "rgba(255,255,255,0.04)",
-                  backdropFilter: "blur(12px)",
-                  boxShadow: `0 0 20px -8px ${tech.color}55`,
-                  transition: "transform 0.3s ease-out, border-color 0.3s ease-out, box-shadow 0.3s ease-out",
+                  border: "1px solid rgba(255,255,255,0.15)",
+                  background: "rgba(255,255,255,0.08)",
+                  backdropFilter: "blur(18px)",
+                  WebkitBackdropFilter: "blur(18px)",
+                  boxShadow: `0 0 24px -2px ${tech.color}88, 0 8px 30px rgba(0,0,0,0.6)`,
+                  transition: "transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.28s ease, box-shadow 0.28s ease",
                 }}
                 onMouseEnter={(e) => {
                   const el = e.currentTarget as HTMLDivElement;
-                  el.style.borderColor = "rgba(255,255,255,0.25)";
-                  el.style.boxShadow = `0 0 25px rgba(59, 130, 246, 0.45), 0 0 10px rgba(255, 255, 255, 0.25)`;
+                  el.style.transform = "translateY(-6px) scale(1.08)";
+                  el.style.borderColor = "rgba(255,255,255,0.35)";
+                  el.style.boxShadow = `0 0 32px ${tech.color}bb, 0 0 16px rgba(255,255,255,0.35), 0 14px 38px rgba(0,0,0,0.8)`;
                 }}
                 onMouseLeave={(e) => {
                   const el = e.currentTarget as HTMLDivElement;
-                  el.style.borderColor = "rgba(255,255,255,0.08)";
-                  el.style.boxShadow = `0 0 20px -8px ${tech.color}55`;
+                  el.style.transform = "translateY(0px) scale(1)";
+                  el.style.borderColor = "rgba(255,255,255,0.15)";
+                  el.style.boxShadow = `0 0 24px -2px ${tech.color}88, 0 8px 30px rgba(0,0,0,0.6)`;
                 }}
               >
                 <img
                   src={tech.icon}
                   alt={tech.name}
                   loading="lazy"
-                  style={{ width: 30, height: 30, objectFit: "contain" }}
+                  style={{ width: 34, height: 34, objectFit: "contain", filter: "brightness(1.15) contrast(1.15)" }}
                 />
                 <span
                   style={{
                     fontSize: 9,
-                    color: "rgba(255,255,255,0.5)",
+                    color: "#FFFFFF",
+                    fontWeight: 600,
                     fontFamily: "monospace",
                     textTransform: "uppercase",
                     letterSpacing: "0.1em",

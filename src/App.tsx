@@ -8,6 +8,7 @@ import WelcomeScreen from "@/components/WelcomeScreen";
 import AIEngineerSection from "@/components/AIEngineerSection";
 import Showcase from "./components/Showcase";
 import ContactSection from "@/components/ContactSection";
+import NeuralBackground from "@/components/NeuralBackground";
 import { Routes, Route } from "react-router-dom";
 import About from "./pages/About";
 
@@ -76,7 +77,8 @@ export default function App() {
   return (
     <Routes>
       <Route path="/" element={
-        <div className="min-h-screen bg-black text-white overflow-x-hidden">
+        <div className="min-h-screen bg-black text-white overflow-x-hidden relative">
+          <NeuralBackground />
           <AnimatePresence>{showWelcome && <WelcomeScreen />}</AnimatePresence>
 
           <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 py-5 backdrop-blur-xl bg-black/20 border-b border-white/10">

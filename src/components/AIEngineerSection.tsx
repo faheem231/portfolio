@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, lazy, Suspense } from "react";
-import { motion, useInView, AnimatePresence } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
+import TerminalProfile from "./TerminalProfile";
 
 const BandCard = lazy(() => import("./BandCard"));
 
@@ -59,8 +60,8 @@ export default function AIEngineerSection() {
       }}
       className="relative w-full min-h-screen bg-black text-white overflow-hidden flex items-start px-6 md:px-20 pt-16 md:pt-28 select-none"
     >
-      {/* TEXT */}
-      <div className="relative z-10 max-w-2xl">
+      {/* TEXT & BUTTONS */}
+      <div className="relative z-[100] max-w-2xl pointer-events-auto">
         <motion.div className="flex items-center mb-6">
           <motion.span
             animate={{
@@ -159,14 +160,15 @@ export default function AIEngineerSection() {
           ))}
         </motion.div>
 
-        <div className="mt-8 flex flex-col [@media(min-width:540px)]:flex-row items-start md:items-center gap-4">
-          {/* Show Card Button */}
+        {/* BUTTON CONTAINER - z-100 to stay above background layers */}
+        <div className="mt-8 flex flex-col [@media(min-width:540px)]:flex-row items-start md:items-center gap-4 relative z-[100] pointer-events-auto">
+          {/* Show Card / Hide Card Button */}
           <motion.button
             initial={{ opacity: 0, y: 30 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.9 }}
             onClick={() => setShowCard((s) => !s)}
-            className="inline-flex items-center gap-2 border border-accent text-accent px-6 py-3 text-xs tracking-[0.25em] uppercase font-semibold hover:bg-accent hover:text-black transition-all duration-200 rounded-full relative z-20"
+            className="inline-flex items-center gap-2 border border-accent text-accent px-6 py-3 text-xs tracking-[0.25em] uppercase font-semibold hover:bg-accent hover:text-black transition-all duration-200 rounded-full relative z-[100] cursor-pointer"
           >
             {showCard ? "Hide Card" : "Show Card"}
           </motion.button>
@@ -177,29 +179,46 @@ export default function AIEngineerSection() {
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 1.1, delay: 1.4 }}
             onClick={() => setGoAbout(true)}
-            className="inline-flex items-center gap-2 border border-white/30 text-white px-6 py-3 text-xs uppercase font-bold hover:bg-white hover:text-black rounded-full transition"
+            className="inline-flex items-center gap-2 border border-white/30 text-white px-6 py-3 text-xs uppercase font-bold hover:bg-white hover:text-black rounded-full transition relative z-[100] cursor-pointer"
           >
             About Me
           </motion.button>
         </div>
       </div>
 
-      {/* 3D ID CARD */}
-      <AnimatePresence>
-        {showCard && mounted && (
-          <motion.div
-            initial={{ y: "-100%", opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: "-100%", opacity: 0 }}
-            transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute inset-0 z-[5] pointer-events-none"
-          >
-            <Suspense fallback={null}>
-              <BandCard />
-            </Suspense>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* TERMINAL WINDOW (State 1: Visible on default, State 2: Hidden on Show Card) */}
+      <div
+        className={`
+          hidden md:block absolute right-[3%] lg:right-[6%] xl:right-[10%] top-[120px] md:top-[140px] lg:top-[150px]
+          w-[90vw] max-w-[420px] sm:max-w-[480px] lg:max-w-[520px] z-[4] select-none
+          transition-all duration-[450ms] ease-in-out
+          ${
+            showCard
+              ? "opacity-0 scale-97 invisible pointer-events-none"
+              : "opacity-100 scale-100 visible pointer-events-auto"
+          }
+        `}
+      >
+        <TerminalProfile />
+      </div>
+
+      {/* 3D ID CARD (State 1: Hidden on default, State 2: Visible on Show Card) */}
+      {mounted && (
+        <div
+          className={`
+            absolute inset-0 z-[10] transition-all duration-[450ms] ease-in-out
+            ${
+              showCard
+                ? "opacity-100 scale-100 visible pointer-events-none md:translate-x-[15px] lg:translate-x-[25px] xl:translate-x-[35px] drop-shadow-[0_0_50px_rgba(255,255,255,0.15)]"
+                : "opacity-0 scale-95 invisible pointer-events-none md:-translate-x-[60px] lg:-translate-x-[90px] xl:-translate-x-[110px]"
+            }
+          `}
+        >
+          <Suspense fallback={null}>
+            <BandCard />
+          </Suspense>
+        </div>
+      )}
     </motion.section>
   );
 }
