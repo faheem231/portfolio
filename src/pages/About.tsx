@@ -3,6 +3,7 @@ import { ArrowLeft, Download } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import NeuralBackground from "@/components/NeuralBackground";
+// @ts-ignore
 import html2pdf from "html2pdf.js";
 
 export default function About() {
@@ -10,13 +11,13 @@ export default function About() {
   const text = "About Myself";
 
   const [displayedText, setDisplayedText] = useState("");
-  const [countdown, setCountdown] = useState(null);
+  const [countdown, setCountdown] = useState<number | null>(null);
   const [downloading, setDownloading] = useState(false);
 
   // TYPING EFFECT
   useEffect(() => {
     let index = 0;
-    let interval;
+    let interval: ReturnType<typeof setInterval>;
 
     const startTyping = () => {
       setDisplayedText("");

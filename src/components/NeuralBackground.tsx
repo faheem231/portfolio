@@ -76,6 +76,7 @@ export default function NeuralBackground() {
     mouseRef.current.targetY = height / 3;
 
     function render() {
+      if (!ctx) return;
       ctx.clearRect(0, 0, width, height);
 
       // Smooth lerp mouse tracking

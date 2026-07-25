@@ -32,6 +32,7 @@ const projects = [
 
 const certificates = [
   {
+    title: "GDG On Campus Cepheus Hackathon",
     tech: `GDG On Campus
 Cepheus Hackathon
 
@@ -42,6 +43,7 @@ Participant`,
     thumbnail: "./assets/Cepheus.png",
   },
   {
+    title: "Infosys Springboard Basics of Python",
     tech: `Infosys Springboard
 
 Basics of Python
@@ -184,7 +186,7 @@ function TechGrid() {
   const lastMY = useRef(0);
   const dragVX = useRef(0);
   const dragVY = useRef(0);
-  const rafId = useRef<number>();
+  const rafId = useRef<number | null>(null);
   const itemEls = useRef<HTMLDivElement[]>([]);
 
   const RADIUS = 160;
