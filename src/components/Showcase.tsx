@@ -26,7 +26,7 @@ const projects = [
   {
     tech: "REACT + THREE.JS",
     thumbnail: "/assets/portfolio.png",
-    github: "",
+    github: "https://github.com/faheem231/portfolio",
   },
 ];
 
