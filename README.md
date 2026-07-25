@@ -20,15 +20,11 @@ A modern developer portfolio built with React, TypeScript, Tailwind CSS, and Fra
 
 ---
 
+
+
 ## 📸 Preview
 
-> Add a screenshot of your homepage here.
-
-```md
-/assets/portfolio.png
-```
-
----
+![Portfolio Preview](public/assets/portfolio.png)
 
 # ✨ Features
 
