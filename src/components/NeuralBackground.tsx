@@ -90,9 +90,9 @@ export default function NeuralBackground() {
 
         context.beginPath();
         context.arc(node.x, node.y, node.radius * node.depth, 0, Math.PI * 2);
-        context.fillStyle = `rgba(151, 193, 248, ${0.32 + node.depth * 0.32})`;
+        context.fillStyle = `rgba(238, 244, 255, ${0.42 + node.depth * 0.42})`;
         context.shadowBlur = 8;
-        context.shadowColor = "rgba(71, 139, 230, 0.45)";
+        context.shadowColor = "rgba(235, 243, 255, 0.62)";
         context.fill();
         context.shadowBlur = 0;
 
@@ -100,11 +100,11 @@ export default function NeuralBackground() {
           const other = nodes[j];
           const distance = Math.hypot(other.x - node.x, other.y - node.y);
           if (distance >= linkDistance) continue;
-          const alpha = (1 - distance / linkDistance) * 0.17 * Math.min(node.depth, other.depth);
+          const alpha = (1 - distance / linkDistance) * 0.34 * Math.min(node.depth, other.depth);
           context.beginPath();
           context.moveTo(node.x, node.y);
           context.lineTo(other.x, other.y);
-          context.strokeStyle = `rgba(105, 161, 235, ${alpha})`;
+          context.strokeStyle = `rgba(222, 232, 248, ${alpha})`;
           context.lineWidth = 0.7;
           context.stroke();
         }
@@ -115,7 +115,7 @@ export default function NeuralBackground() {
             context.beginPath();
             context.moveTo(pointer.x, pointer.y);
             context.lineTo(node.x, node.y);
-            context.strokeStyle = `rgba(137, 185, 247, ${(1 - distance / pointerRadius) * 0.16})`;
+            context.strokeStyle = `rgba(245, 248, 255, ${(1 - distance / pointerRadius) * 0.48})`;
             context.lineWidth = 0.75;
             context.stroke();
           }
@@ -161,7 +161,7 @@ export default function NeuralBackground() {
   return (
     <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden" aria-hidden="true">
       <canvas ref={canvasRef} className="absolute inset-0" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_35%,rgba(13,35,68,0.14),transparent_68%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_35%,rgba(255,255,255,0.035),transparent_68%)]" />
     </div>
   );
 }
