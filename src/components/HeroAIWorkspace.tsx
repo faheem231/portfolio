@@ -4,6 +4,7 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { Float, Html, RoundedBox } from "@react-three/drei";
 import * as THREE from "three";
 import { BrainCircuit, Code2, Network, Sparkles } from "lucide-react";
+import { useReducedMotion } from "framer-motion";
 
 type PanelKind = "python" | "learning" | "generative";
 
@@ -12,12 +13,14 @@ function Panel({
   position,
   rotation,
   active,
+  reduceMotion,
   onActivate,
 }: {
   kind: PanelKind;
   position: [number, number, number];
   rotation: [number, number, number];
   active: boolean;
+  reduceMotion: boolean;
   onActivate: (kind: PanelKind | null) => void;
 }) {
   const config = {
@@ -53,7 +56,7 @@ function Panel({
   const Icon = config.Icon;
 
   return (
-    <Float speed={active ? 2.4 : 1.1} rotationIntensity={0.08} floatIntensity={active ? 0.22 : 0.12}>
+    <Float speed={reduceMotion ? 0 : active ? 2.4 : 1.1} rotationIntensity={reduceMotion ? 0 : 0.08} floatIntensity={reduceMotion ? 0 : active ? 0.22 : 0.12}>
       <group position={position} rotation={rotation}>
         <RoundedBox args={[2.55, 1.7, 0.09]} radius={0.12} smoothness={4}>
           <meshPhysicalMaterial
@@ -96,14 +99,15 @@ function Panel({
 function WorkspaceScene() {
   const group = useRef<THREE.Group>(null);
   const [active, setActive] = useState<PanelKind | null>(null);
+  const reduceMotion = useReducedMotion();
 
   useFrame(({ pointer, size }, delta) => {
     if (!group.current) return;
     const targetScale = size.width < 480 ? 0.58 : size.width < 767 ? 0.68 : size.width < 1024 ? 0.84 : 1;
     const scale = THREE.MathUtils.damp(group.current.scale.x, targetScale, 3, delta);
     group.current.scale.setScalar(scale);
-    const targetY = pointer.x * 0.12;
-    const targetX = -pointer.y * 0.07;
+    const targetY = reduceMotion ? 0 : pointer.x * 0.12;
+    const targetX = reduceMotion ? 0 : -pointer.y * 0.07;
     group.current.rotation.y = THREE.MathUtils.damp(group.current.rotation.y, targetY, 3.2, delta);
     group.current.rotation.x = THREE.MathUtils.damp(group.current.rotation.x, targetX, 3.2, delta);
   });
@@ -118,6 +122,7 @@ function WorkspaceScene() {
           kind="python"
           position={[-2.55, 0.38, 0]}
           rotation={[0.02, 0.13, -0.055]}
+          reduceMotion={reduceMotion}
           active={active === "python"}
           onActivate={setActive}
         />
@@ -125,6 +130,7 @@ function WorkspaceScene() {
           kind="learning"
           position={[0, -0.28, 0.45]}
           rotation={[-0.025, -0.04, 0.025]}
+          reduceMotion={reduceMotion}
           active={active === "learning"}
           onActivate={setActive}
         />
@@ -132,6 +138,7 @@ function WorkspaceScene() {
           kind="generative"
           position={[2.55, 0.34, -0.12]}
           rotation={[0.02, -0.15, 0.055]}
+          reduceMotion={reduceMotion}
           active={active === "generative"}
           onActivate={setActive}
         />
@@ -147,7 +154,7 @@ export default function HeroAIWorkspace() {
       <Canvas
         dpr={[1, 1.5]}
         camera={{ position: [0, 0, 8], fov: 39 }}
-        gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }}
+        gl={{ alpha: true, antialias: true }}
         onCreated={({ gl }) => gl.setClearColor("#000000", 0)}
       >
         <WorkspaceScene />
