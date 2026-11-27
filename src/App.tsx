@@ -1,9 +1,6 @@
 import { ArrowUpRight, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { AnimatePresence } from "framer-motion";
-
-import heroEye from "@/assets/hero.png";
-
 import WelcomeScreen from "@/components/WelcomeScreen";
 import AIEngineerSection from "@/components/AIEngineerSection";
 import Showcase from "./components/Showcase";
@@ -221,14 +218,6 @@ export default function App() {
             id="Home"
             className="relative w-full h-screen min-h-[640px] overflow-hidden bg-black"
           >
-            <div className="absolute inset-0 flex items-center justify-center">
-              <img
-                src={heroEye}
-                alt="Hero"
-                className="h-[90%] w-[90%] object-contain object-center translate-x-[7%] md:translate-x-[10%] translate-y-[5%] md:translate-y-[8%]"
-              />
-            </div>
-
             <div className="relative z-10 w-full h-full flex flex-col justify-between px-6 md:px-12 pt-24 pb-10">
               <h1
                 onClick={() => setColorMode((prev) => (prev + 1) % colors.length)}
