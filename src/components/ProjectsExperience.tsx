@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   ArrowDownRight,
@@ -206,7 +207,7 @@ function ProjectDetail({
     };
   }, []);
 
-  return (
+  return createPortal(
     <motion.div
       className="project-detail-overlay fixed inset-0 z-[99999] flex items-start justify-center overflow-y-auto overscroll-contain bg-black/90 p-3 pt-4 backdrop-blur-2xl sm:items-center sm:p-5"
       initial={{ opacity: 0 }}
@@ -225,7 +226,7 @@ function ProjectDetail({
         animate={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
         exit={{ opacity: 0, y: 24, scale: 0.98 }}
         transition={spring}
-        className="project-detail-dialog relative my-auto flex max-h-[calc(100dvh-32px)] w-full max-w-[1380px] flex-col overflow-hidden rounded-[24px] border border-white/15 bg-[#090a0e] shadow-[0_35px_120px_rgba(0,0,0,0.8)] sm:max-h-[calc(100dvh-40px)] sm:rounded-[28px]"
+        className="project-detail-dialog relative my-4 flex h-[calc(100dvh-32px)] w-full max-w-[1380px] shrink-0 flex-col overflow-hidden rounded-[24px] border border-white/15 bg-[#090a0e] shadow-[0_35px_120px_rgba(0,0,0,0.8)] sm:my-5 sm:h-[min(900px,calc(100dvh-40px))] sm:rounded-[28px]"
       >
         <div className="project-detail-header sticky top-0 z-30 flex shrink-0 items-center justify-between gap-3 border-b border-white/10 bg-[#090a0e]/95 px-4 py-3 backdrop-blur-2xl sm:px-7 sm:py-4">
           <button
@@ -250,9 +251,9 @@ function ProjectDetail({
           </button>
         </div>
 
-        <div className="project-detail-body min-h-0 flex-1 overflow-y-auto overscroll-contain lg:grid lg:grid-cols-[1.08fr_0.92fr]">
+        <div className="project-detail-body relative z-0 min-h-0 flex-1 overflow-x-hidden overflow-y-auto overscroll-y-contain [touch-action:pan-y] lg:grid lg:grid-cols-[1.08fr_0.92fr] lg:items-start">
           <motion.div
-            className="project-detail-preview group/preview relative flex min-h-[250px] items-center justify-center overflow-hidden bg-[#080a10] sm:min-h-[340px] lg:sticky lg:top-0 lg:h-full lg:min-h-[560px]"
+            className="project-detail-preview group/preview relative flex min-h-[250px] items-center justify-center self-start overflow-hidden bg-[#080a10] sm:min-h-[340px] lg:min-h-[560px]"
             initial={{ opacity: 0, scale: 0.97 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
@@ -375,7 +376,8 @@ function ProjectDetail({
           </div>
         </div>
       </motion.section>
-    </motion.div>
+    </motion.div>,
+    document.body,
   );
 }
 
@@ -526,11 +528,24 @@ export default function ProjectsExperience() {
       </AnimatePresence>
 
       <style>{`
-        .project-detail-overlay { isolation: isolate; }
-        .project-detail-dialog { contain: layout paint; }
+        .project-detail-overlay {
+          isolation: isolate;
+          z-index: 2147483000;
+          -webkit-overflow-scrolling: touch;
+          overscroll-behavior: contain;
+        }
+        .project-detail-dialog {
+          contain: layout paint;
+          min-height: 0;
+        }
         .project-detail-body {
+          min-height: 0;
+          flex: 1 1 0%;
+          overflow-y: auto !important;
+          overscroll-behavior-y: contain;
           scrollbar-width: thin;
-          scrollbar-color: rgba(255,255,255,.22) transparent;
+          scrollbar-color: rgba(255,255,255,.3) transparent;
+          -webkit-overflow-scrolling: touch;
         }
         .project-detail-body::-webkit-scrollbar { width: 6px; }
         .project-detail-body::-webkit-scrollbar-thumb {
