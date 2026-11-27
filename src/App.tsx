@@ -1,5 +1,5 @@
 import { ArrowUpRight, Menu, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { AnimatePresence } from "framer-motion";
 
 import WelcomeScreen from "@/components/WelcomeScreen";
@@ -9,6 +9,8 @@ import ContactSection from "@/components/ContactSection";
 import NeuralBackground from "@/components/NeuralBackground";
 import { Routes, Route } from "react-router-dom";
 import About from "./pages/About";
+
+const HeroAIWorkspace = lazy(() => import("@/components/HeroAIWorkspace"));
 
 
 const logos = ["FAHEEM", "STUDENT", "AI", "ENGINEER"];
@@ -219,52 +221,9 @@ export default function App() {
             id="Home"
             className="relative w-full h-screen min-h-[640px] overflow-hidden bg-black"
           >
-            <div className="hero-neural-visual" aria-hidden="true">
-              <div className="hero-neural-halo" />
-              <svg className="hero-neural-svg" viewBox="0 0 700 700" fill="none">
-                <defs>
-                  <radialGradient id="neuralCoreGradient" cx="35%" cy="28%" r="75%">
-                    <stop offset="0%" stopColor="#F8FBFF" /><stop offset="18%" stopColor="#AFC8FF" />
-                    <stop offset="42%" stopColor="#527BDA" /><stop offset="72%" stopColor="#182B59" />
-                    <stop offset="100%" stopColor="#050812" />
-                  </radialGradient>
-                  <radialGradient id="neuralGlowGradient">
-                    <stop offset="0%" stopColor="#7EA7FF" stopOpacity=".42" /><stop offset="100%" stopColor="#7EA7FF" stopOpacity="0" />
-                  </radialGradient>
-                  <filter id="neuralBlur"><feGaussianBlur stdDeviation="12" /></filter>
-                </defs>
-                <circle cx="350" cy="350" r="250" fill="url(#neuralGlowGradient)" filter="url(#neuralBlur)" />
-                <g className="hero-orbit hero-orbit-a">
-                  <ellipse cx="350" cy="350" rx="250" ry="92" stroke="#A9C5FF" strokeOpacity=".45" />
-                  <ellipse cx="350" cy="350" rx="250" ry="92" stroke="#A9C5FF" strokeOpacity=".16" transform="rotate(60 350 350)" />
-                </g>
-                <g className="hero-orbit hero-orbit-b">
-                  <ellipse cx="350" cy="350" rx="205" ry="120" stroke="#DCE8FF" strokeOpacity=".35" transform="rotate(-48 350 350)" />
-                  <ellipse cx="350" cy="350" rx="285" ry="150" stroke="#789BEB" strokeOpacity=".22" transform="rotate(24 350 350)" />
-                </g>
-                <g stroke="#9BB9FF" strokeOpacity=".38" strokeWidth="1.4">
-                  <path d="M350 92 455 190 530 325 470 470 350 585 210 470 155 325 245 190Z" />
-                  <path d="M245 190 455 190 470 470 210 470Z" />
-                  <path d="M155 325 350 92 530 325 350 585Z" />
-                  <path d="M245 190 350 350 455 190M210 470 350 350 470 470" />
-                </g>
-                <g fill="#DCE8FF">
-                  <circle cx="350" cy="92" r="5" /><circle cx="455" cy="190" r="4" /><circle cx="530" cy="325" r="5" />
-                  <circle cx="470" cy="470" r="4" /><circle cx="350" cy="585" r="5" /><circle cx="210" cy="470" r="4" />
-                  <circle cx="155" cy="325" r="5" /><circle cx="245" cy="190" r="4" />
-                </g>
-                <circle cx="350" cy="350" r="126" fill="#7399F2" fillOpacity=".12" />
-                <circle cx="350" cy="350" r="92" fill="url(#neuralCoreGradient)" stroke="#DCE8FF" strokeOpacity=".6" strokeWidth="1.5" />
-                <circle cx="350" cy="350" r="68" stroke="#E5EEFF" strokeOpacity=".2" />
-                <circle cx="350" cy="350" r="38" fill="#EAF2FF" fillOpacity=".12" />
-                <circle cx="350" cy="350" r="17" fill="#F8FBFF" />
-                <circle cx="350" cy="350" r="38" stroke="#DCE8FF" strokeOpacity=".6" />
-              </svg>
-              <div className="hero-orbit-label hero-orbit-label-one">MACHINE LEARNING</div>
-              <div className="hero-orbit-label hero-orbit-label-two">NEURAL NETWORKS</div>
-              <div className="hero-orbit-label hero-orbit-label-three">GENERATIVE AI</div>
-              <div className="hero-neural-caption"><span /> NEURAL SYSTEM / ONLINE</div>
-            </div>
+            <Suspense fallback={<div className="hero-ai-workspace-fallback" aria-hidden="true" />}>
+              <HeroAIWorkspace />
+            </Suspense>
 
             <div className="relative z-10 w-full h-full flex flex-col justify-between px-6 md:px-12 pt-24 pb-10">
               <h1
@@ -334,41 +293,51 @@ animate-[shine_4s_linear_infinite]">
           100% { transform: translateX(-33.333%); }
         }
         .animate-marquee { animation: marquee 10s linear infinite; }
-        .hero-neural-visual {
-          position:absolute; z-index:0; width:min(57vw,720px); aspect-ratio:1;
-          right:13%; top:51%; transform:translate(50%,-50%); pointer-events:none;
-          opacity:.92; filter:drop-shadow(0 0 50px rgba(74,116,220,.12));
+        .hero-ai-workspace {
+          position:absolute; z-index:1; width:min(59vw,780px); height:270px;
+          right:2.5%; top:64%; transform:translateY(-50%);
+          overflow:visible; isolation:isolate;
         }
-        .hero-neural-halo {
-          position:absolute; inset:12%; border-radius:50%;
-          background:radial-gradient(circle,rgba(58,91,166,.2),rgba(14,25,50,.08) 45%,transparent 72%);
-          filter:blur(22px); animation:neural-halo-pulse 5s ease-in-out infinite;
+        .hero-ai-workspace canvas { position:relative; z-index:1; }
+        .ai-workspace-glow {
+          position:absolute; inset:14% 10%; border-radius:50%;
+          background:radial-gradient(ellipse,rgba(62,104,190,.19),rgba(39,61,112,.08) 48%,transparent 75%);
+          filter:blur(30px); pointer-events:none; animation:ai-glow-breathe 6s ease-in-out infinite;
         }
-        .hero-neural-svg { position:relative; width:100%; height:100%; overflow:visible; }
-        .hero-orbit-a { transform-origin:350px 350px; animation:neural-rotate 32s linear infinite; }
-        .hero-orbit-b { transform-origin:350px 350px; animation:neural-rotate 42s linear infinite reverse; }
-        .hero-orbit-label {
-          position:absolute; padding:7px 11px; border:1px solid rgba(190,210,255,.2);
-          border-radius:999px; background:rgba(5,9,19,.55); color:rgba(222,234,255,.65);
-          font:9px/1 monospace; letter-spacing:.2em; white-space:nowrap; backdrop-filter:blur(12px);
-          animation:neural-float 5s ease-in-out infinite;
+        .ai-workspace-panel {
+          width:190px; min-height:126px; box-sizing:border-box; padding:13px 14px;
+          color:#edf3ff; border:1px solid rgba(188,211,255,.25); border-radius:15px;
+          background:linear-gradient(145deg,rgba(23,34,54,.88),rgba(7,11,19,.78));
+          box-shadow:0 16px 45px rgba(0,0,0,.38),inset 0 1px rgba(255,255,255,.09);
+          backdrop-filter:blur(18px); transition:border-color .25s ease,box-shadow .25s ease,background .25s ease;
+          cursor:default; user-select:none;
         }
-        .hero-orbit-label-one { top:20%; left:2%; }
-        .hero-orbit-label-two { top:48%; right:-2%; animation-delay:-1.7s; }
-        .hero-orbit-label-three { bottom:17%; left:13%; animation-delay:-3.1s; }
-        .hero-neural-caption { position:absolute; bottom:13%; right:8%; color:rgba(220,232,255,.42); font:9px/1 monospace; letter-spacing:.24em; }
-        .hero-neural-caption span { display:inline-block; width:6px; height:6px; margin-right:8px; border-radius:50%; background:#9bb9ff; box-shadow:0 0 12px #7399f2; animation:neural-status 1.8s ease-in-out infinite; }
-        @keyframes neural-rotate { to { transform:rotate(360deg); } }
-        @keyframes neural-float { 0%,100% { translate:0 0; } 50% { translate:0 -9px; } }
-        @keyframes neural-halo-pulse { 0%,100% { opacity:.55; scale:.94; } 50% { opacity:1; scale:1.06; } }
-        @keyframes neural-status { 50% { opacity:.35; } }
+        .ai-workspace-panel.is-active {
+          border-color:var(--panel-accent); background:linear-gradient(145deg,rgba(36,53,82,.96),rgba(8,13,24,.9));
+          box-shadow:0 0 30px color-mix(in srgb,var(--panel-accent) 20%,transparent),0 20px 55px rgba(0,0,0,.45);
+        }
+        .ai-panel-topline { display:flex; justify-content:space-between; color:rgba(205,220,246,.55); font:8px/1.2 ui-monospace,monospace; letter-spacing:.13em; }
+        .ai-panel-heading { display:flex; align-items:center; gap:9px; margin-top:13px; font:600 13px/1.2 Inter,system-ui,sans-serif; }
+        .ai-panel-icon { display:grid; place-items:center; width:29px; height:29px; border-radius:9px; color:var(--panel-accent); background:rgba(154,188,255,.1); border:1px solid rgba(173,202,255,.16); }
+        .ai-panel-code { margin-top:10px; padding:7px 8px; border-radius:7px; color:#c5d8ff; background:rgba(2,6,13,.52); font:9px/1.2 ui-monospace,monospace; white-space:nowrap; }
+        .ai-panel-status { display:flex; align-items:center; gap:6px; margin-top:10px; color:rgba(207,220,242,.53); font:7px/1 ui-monospace,monospace; letter-spacing:.12em; }
+        .ai-status-dot { display:inline-block; width:5px; height:5px; flex:none; border-radius:50%; background:#8eb7ff; box-shadow:0 0 9px #8eb7ff; animation:ai-status-pulse 1.8s ease-in-out infinite; }
+        .ai-panel-spark { margin-left:auto; color:var(--panel-accent); }
+        .ai-workspace-footnote { position:absolute; z-index:2; right:12%; bottom:0; color:rgba(206,220,245,.38); font:8px/1 ui-monospace,monospace; letter-spacing:.2em; pointer-events:none; }
+        .ai-workspace-footnote .ai-status-dot { margin-right:7px; }
+        .hero-ai-workspace-fallback { position:absolute; right:8%; top:64%; width:50vw; height:220px; transform:translateY(-50%); }
+        @keyframes ai-status-pulse { 50% { opacity:.35; } }
+        @keyframes ai-glow-breathe { 0%,100% { opacity:.55; transform:scale(.94); } 50% { opacity:1; transform:scale(1.05); } }
         @media(max-width:767px) {
-          .hero-neural-visual { width:105vw; right:50%; top:49%; opacity:.55; }
-          .hero-orbit-label { font-size:7px; }
-          .hero-neural-caption { right:15%; bottom:18%; font-size:7px; }
+          .hero-ai-workspace { width:100%; height:205px; right:0; top:59%; opacity:.95; }
+          .ai-workspace-panel { width:155px; min-height:112px; padding:10px 11px; border-radius:12px; }
+          .ai-panel-heading { font-size:11px; margin-top:9px; }
+          .ai-panel-code { font-size:8px; margin-top:7px; }
+          .ai-panel-status { margin-top:8px; font-size:6px; }
+          .ai-workspace-footnote { right:10%; bottom:-5px; font-size:6px; }
         }
         @media(prefers-reduced-motion:reduce) {
-          .hero-orbit-a,.hero-orbit-b,.hero-orbit-label,.hero-neural-halo,.hero-neural-caption span { animation:none!important; }
+          .ai-workspace-glow,.ai-status-dot { animation:none!important; }
         }
       `}</style>
 
