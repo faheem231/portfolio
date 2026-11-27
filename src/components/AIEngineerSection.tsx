@@ -58,7 +58,7 @@ export default function AIEngineerSection() {
         duration: 1.8,
         ease: [0.16, 1, 0.3, 1],
       }}
-      className="relative w-full min-h-screen bg-black text-white overflow-hidden flex items-start px-6 md:px-20 pt-16 md:pt-28 select-none"
+      className="relative w-full min-h-screen bg-transparent text-white overflow-hidden flex items-start px-6 md:px-20 pt-16 md:pt-28 select-none"
     >
       {/* TEXT & BUTTONS */}
       <div className="relative z-[100] max-w-2xl pointer-events-auto">
