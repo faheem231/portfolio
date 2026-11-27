@@ -60,8 +60,18 @@ function GlitchLetter({ char, index }: { char: string; index: number }) {
       <motion.span
         animate={
           hovered
-            ? { color: "#ffffff", textShadow: "0 0 18px rgba(255,255,255,0.45)", scaleY: 1.04 }
-            : { color: "rgba(255,255,255,0.90)", textShadow: "none", scaleY: 1 }
+            ? {
+                color: "#ffffff",
+                textShadow:
+                  "0 14px 36px rgba(0,0,0,0.95), 0 0 28px rgba(255,255,255,0.55)",
+                scaleY: 1.04,
+              }
+            : {
+                color: "rgba(255,255,255,0.94)",
+                textShadow:
+                  "0 14px 32px rgba(0,0,0,0.95), 0 4px 22px rgba(255,255,255,0.22)",
+                scaleY: 1,
+              }
         }
         transition={{ duration: 0.18 }}
         style={{ display: "inline-block" }}
@@ -78,19 +88,30 @@ export default function HeroName() {
       className="relative mt-6 select-none"
       style={{ perspective: "600px" }}
     >
-      {/* Faint stroke ghost for depth */}
+      {/* Soft ambient shadow behind name */}
+      <div
+        aria-hidden
+        className="absolute -inset-x-8 -inset-y-6 pointer-events-none blur-3xl opacity-85"
+        style={{
+          background:
+            "radial-gradient(ellipse at 32% 50%, rgba(255,255,255,0.16) 0%, rgba(0,0,0,0.7) 55%, transparent 78%)",
+        }}
+      />
+
+      {/* Offset stroke shadow for depth */}
       <div
         aria-hidden
         className="absolute inset-0 pointer-events-none"
         style={{
-          WebkitTextStroke: "1px rgba(255,255,255,0.06)",
-          color: "transparent",
+          WebkitTextStroke: "1.5px rgba(255,255,255,0.22)",
+          color: "rgba(255,255,255,0.04)",
           fontSize: "clamp(4.5rem, 20vw, 12rem)",
           fontFamily: "'Archivo', sans-serif",
           fontWeight: 900,
           letterSpacing: "-0.02em",
           userSelect: "none",
           lineHeight: 1,
+          transform: "translate(10px, 12px)",
         }}
       >
         FAHEEM
