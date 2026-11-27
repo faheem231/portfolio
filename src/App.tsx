@@ -221,6 +221,7 @@ export default function App() {
             id="Home"
             className="relative w-full h-screen min-h-[640px] overflow-hidden bg-black"
           >
+            {/* Keep the existing hero visual/background unchanged */}
             <div className="absolute inset-0 flex items-center justify-center">
               <img
                 src={heroEye}
@@ -230,52 +231,40 @@ export default function App() {
             </div>
 
             <div className="relative z-10 w-full h-full flex flex-col justify-between px-6 md:px-12 pt-24 pb-10">
-              <h1
-                onClick={() => setColorMode((prev) => (prev + 1) % colors.length)}
-                className={`font-display uppercase leading-[0.85] tracking-[-0.03em] text-[22vw] md:text-[14vw] lg:text-[13rem] cursor-pointer transition-all duration-300 ${colors[colorMode]}`}
-              >
-                {displayed || "\u00A0"}
-              </h1>
+              <div>
+                <p className="text-xs tracking-[0.3em] text-white/50 uppercase">Portfolio — 2026 · AI &amp; Machine Learning</p>
+                <h1 className="mt-8 font-display uppercase leading-[0.85] tracking-[-0.04em] text-[22vw] md:text-[14vw] lg:text-[13rem] text-white">
+                  Faheem<span className="text-white/60">.</span>
+                </h1>
+              </div>
 
-              <p className="md:absolute md:top-28 md:right-16
-mt-4 md:mt-0
-text-right
-text-3xl md:text-4xl lg:text-5xl
-leading-[1.05]
-max-w-md
-font-[Poppins] font-bold
-tracking-wide
-text-transparent bg-clip-text
-bg-[length:200%_auto]
-bg-gradient-to-r
-from-white via-white/60 to-white
-animate-[shine_4s_linear_infinite]">
-                Building
+              <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 mt-auto">
+                <div className="max-w-xl">
+                  <p className="text-2xl md:text-4xl lg:text-5xl leading-tight font-light text-white">
+                    Building <span className="text-white/60">what comes next.</span>
+                  </p>
+                  <p className="mt-5 text-sm sm:text-base leading-relaxed max-w-lg text-white/65">
+                    AI &amp; Machine Learning student exploring intelligent systems through practical work in Python, machine learning and generative AI.
+                  </p>
+                </div>
 
-                <br />
-                Intelligent
-                <br />
-                AI Systems
-                <br />
-                For Tomorrow.
-              </p>
-
-              <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mt-auto">
-                <p className="relative text-sm sm:text-base lg:text-xl
-    leading-relaxed max-w-md
-    font-[Poppins] font-medium
-    tracking-wide
-    text-transparent bg-clip-text
-    bg-[length:200%_auto]
-    bg-gradient-to-r
-    from-white via-white/60 to-white
-    animate-[shine_4s_linear_infinite]">
-                  AI & Machine Learning Student building intelligent applications with Python, Machine Learning, Deep Learning, NLP and Generative AI.                </p>
-
-
+                <div className="flex flex-wrap gap-3">
+                  <button
+                    onClick={() => document.getElementById("showcase")?.scrollIntoView({ behavior: "smooth" })}
+                    className="inline-flex items-center gap-3 border border-white/80 bg-white px-6 py-3 text-xs tracking-[0.2em] text-black transition-colors hover:bg-white/85"
+                  >
+                    EXPLORE MY WORK <ArrowUpRight size={16} />
+                  </button>
+                  <button
+                    onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
+                    className="inline-flex items-center gap-3 border border-white/30 bg-white/[0.04] px-6 py-3 text-xs tracking-[0.2em] text-white transition-colors hover:border-white/70 hover:bg-white/[0.08]"
+                  >
+                    GET IN TOUCH <ArrowUpRight size={16} />
+                  </button>
+                </div>
               </div>
             </div>
-          </section>
+          </section>>
 
           <div className="bg-black border-t border-white/10 py-5 overflow-hidden">
             <div className="flex items-center gap-16 animate-marquee whitespace-nowrap">
