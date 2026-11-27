@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from "react";
+import ProjectsExperience from "./ProjectsExperience";
 
 const techStack = [
   { name: "Python", icon: "https://cdn.simpleicons.org/python/3776AB", color: "#3776AB" },
@@ -532,19 +533,7 @@ export default function ShowcaseSection() {
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
-          {active === "projects" && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
-              {projects.map((item, i) => (
-                <div
-                  key={i}
-                  className="opacity-0"
-                  style={{ animation: `fadeSlideUp 0.5s ease ${i * 0.08}s forwards` }}
-                >
-                  <ProjectCard item={item} />
-                </div>
-              ))}
-            </div>
-          )}
+          {active === "projects" && <ProjectsExperience />}
 
           {active === "certificates" && (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
