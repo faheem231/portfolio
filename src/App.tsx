@@ -1,6 +1,7 @@
 import { ArrowUpRight, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import WelcomeScreen from "@/components/WelcomeScreen";
 import AIEngineerSection from "@/components/AIEngineerSection";
 import Showcase from "./components/Showcase";
 import ContactSection from "@/components/ContactSection";
@@ -13,8 +14,14 @@ import About from "./pages/About";
 const logos = ["PYTHON", "MACHINE LEARNING", "DEEP LEARNING", "NLP", "GENERATIVE AI"];
 
 export default function App() {
+  const [showWelcome, setShowWelcome] = useState(true);
   const [time, setTime] = useState("");
   const [mobileMenu, setMobileMenu] = useState(false);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => setShowWelcome(false), 3800);
+    return () => window.clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     if (mobileMenu) {
@@ -49,6 +56,7 @@ export default function App() {
       <Route path="/" element={
         <div className="min-h-screen bg-black text-white overflow-x-hidden relative">
           <NeuralBackground />
+          <AnimatePresence>{showWelcome && <WelcomeScreen />}</AnimatePresence>
           <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 py-5 backdrop-blur-xl bg-black/20 border-b border-white/10">
             <div className="flex items-center gap-3">
               <div className="flex w-10 h-10 rounded-full items-center justify-center overflow-hidden bg-[#0B0B0B] border border-white/[0.08] shadow-[0_0_20px_rgba(255,255,255,0.08)] backdrop-blur-[10px] transition-all duration-300 ease-out hover:scale-[1.08] hover:border-white/[0.2] hover:shadow-[0_0_25px_rgba(255,255,255,0.15)]">
