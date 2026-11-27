@@ -260,7 +260,7 @@ export default function App() {
             <div className="hero-film-index" aria-hidden="true">01 / THE BEGINNING</div>
           </section>
 
-          <div className="bg-black border-t border-white/10 py-5 overflow-hidden">
+          <div className="relative z-[2] bg-black/35 backdrop-blur-sm border-t border-white/10 py-5 overflow-hidden">
             <div className="flex items-center gap-16 animate-marquee whitespace-nowrap">
               {[...logos, ...logos, ...logos].map((logo, i) => (
                 <span
@@ -277,8 +277,8 @@ export default function App() {
           <style>{`
         @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-33.333%); } }
         .animate-marquee { animation: marquee 22s linear infinite; }
-        .hero-film { isolation:isolate; z-index:1; min-height:clamp(650px,86svh,850px); color:#f4f6fa; background:transparent; }
-         .hero-film-backdrop { position:absolute; inset:0; overflow:hidden; z-index:0; pointer-events:none; background:radial-gradient(ellipse at 51% 42%,rgba(17,28,48,.62) 0%,rgba(8,13,23,.48) 42%,rgba(3,6,11,.72) 100%); }
+        .hero-film { isolation:isolate; z-index:2; min-height:clamp(650px,86svh,850px); color:#f4f6fa; background:transparent; }
+         .hero-film-backdrop { position:absolute; inset:0; overflow:hidden; z-index:0; pointer-events:none; background:radial-gradient(ellipse at 51% 42%,rgba(17,28,48,.22) 0%,rgba(8,13,23,.12) 42%,rgba(3,6,11,.22) 100%); }
         .hero-digital-mesh { position:absolute; inset:0; width:100%; height:100%; opacity:.2; mix-blend-mode:screen; }
         .hero-digital-architecture { position:absolute; inset:0; perspective:900px; transform-style:preserve-3d; opacity:.28; }
         .hero-digital-portal { position:absolute; bottom:17%; width:clamp(105px,13vw,190px); height:clamp(230px,42vh,390px); border:1px solid rgba(123,170,232,.13); border-bottom:0; transform:rotateY(-18deg) skewY(-3deg); background:linear-gradient(180deg,rgba(35,72,120,.035),rgba(65,112,180,.012) 55%,transparent); box-shadow:inset 0 0 36px rgba(74,126,197,.035),0 0 35px rgba(46,99,169,.035); }
@@ -361,13 +361,13 @@ export default function App() {
         @media(prefers-reduced-motion:reduce) { .animate-marquee,.hero-film-blue-glow,.hero-film-beam,.hero-film-scroll-mark,.hero-digital-orbit,.hero-digital-particles i { animation:none!important; } }
       `}</style>
 
-          <section id="about">
+          <section id="about" className="relative z-[2]">
             <AIEngineerSection />
           </section>
-          <section id="showcase">
+          <section id="showcase" className="relative z-[2]">
             <Showcase />
           </section>
-          <section id="contact">
+          <section id="contact" className="relative z-[2]">
             <ContactSection />
           </section>
         </div>
