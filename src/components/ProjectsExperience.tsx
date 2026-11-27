@@ -208,7 +208,7 @@ function ProjectDetail({
 
   return (
     <motion.div
-      className="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto bg-black/85 p-3 backdrop-blur-2xl sm:p-6"
+      className="project-detail-overlay fixed inset-0 z-[99999] flex items-start justify-center overflow-y-auto overscroll-contain bg-black/90 p-3 pt-4 backdrop-blur-2xl sm:items-center sm:p-5"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -225,10 +225,18 @@ function ProjectDetail({
         animate={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
         exit={{ opacity: 0, y: 24, scale: 0.98 }}
         transition={spring}
-        className="relative my-auto w-full max-w-6xl overflow-hidden rounded-[28px] border border-white/15 bg-[#090a0e] shadow-[0_35px_120px_rgba(0,0,0,0.7)]"
+        className="project-detail-dialog relative my-auto flex max-h-[calc(100dvh-32px)] w-full max-w-[1380px] flex-col overflow-hidden rounded-[24px] border border-white/15 bg-[#090a0e] shadow-[0_35px_120px_rgba(0,0,0,0.8)] sm:max-h-[calc(100dvh-40px)] sm:rounded-[28px]"
       >
-        <div className="flex items-center justify-between border-b border-white/10 px-5 py-4 sm:px-8">
-          <div className="flex items-center gap-3 font-mono text-[10px] tracking-[0.24em] text-white/45">
+        <div className="project-detail-header sticky top-0 z-30 flex shrink-0 items-center justify-between gap-3 border-b border-white/10 bg-[#090a0e]/95 px-4 py-3 backdrop-blur-2xl sm:px-7 sm:py-4">
+          <button
+            type="button"
+            onClick={onClose}
+            className="group inline-flex min-h-10 items-center gap-2 rounded-full border border-white/15 bg-white/[0.04] px-3.5 text-[10px] font-semibold tracking-[0.14em] text-white/75 transition-all duration-300 hover:border-white/40 hover:bg-white/10 hover:text-white"
+          >
+            <ArrowLeft size={14} className="transition-transform duration-300 group-hover:-translate-x-1" />
+            BACK TO PROJECTS
+          </button>
+          <div className="hidden items-center gap-3 font-mono text-[10px] tracking-[0.24em] text-white/40 sm:flex">
             <Command size={14} />
             PROJECT FILE / {project.number}
           </div>
@@ -236,25 +244,36 @@ function ProjectDetail({
             type="button"
             onClick={onClose}
             aria-label="Close project details"
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-white/70 transition hover:border-white/40 hover:bg-white/10 hover:text-white"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/15 bg-white/[0.04] text-white/80 transition-all duration-300 hover:rotate-90 hover:border-white/40 hover:bg-white/10 hover:text-white"
           >
             <X size={18} />
           </button>
         </div>
 
-        <div className="grid lg:grid-cols-[1.08fr_0.92fr]">
-          <div className="relative min-h-[280px] overflow-hidden bg-[#101116] lg:min-h-[590px]">
-            <img
+        <div className="project-detail-body min-h-0 flex-1 overflow-y-auto overscroll-contain lg:grid lg:grid-cols-[1.08fr_0.92fr]">
+          <motion.div
+            className="project-detail-preview group/preview relative flex min-h-[250px] items-center justify-center overflow-hidden bg-[#080a10] sm:min-h-[340px] lg:sticky lg:top-0 lg:h-full lg:min-h-[560px]"
+            initial={{ opacity: 0, scale: 0.97 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <motion.img
               src={project.image}
               alt={`${project.name} interface preview`}
-              className="absolute inset-0 h-full w-full object-cover object-top"
+              className="relative z-0 h-full max-h-[560px] w-full object-contain p-3 sm:p-5"
+              whileHover={{ scale: 1.035 }}
+              transition={{ duration: 0.7, ease: [0.2, 0.8, 0.2, 1] }}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#090a0e] via-black/10 to-black/10 lg:bg-gradient-to-r lg:from-transparent lg:via-transparent lg:to-[#090a0e]/35" />
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,rgba(70,110,255,0.12),transparent_58%)]" />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#090a0e]/55 via-transparent to-transparent" />
             <div className="absolute bottom-5 left-5 flex items-center gap-2 rounded-full border border-white/15 bg-black/45 px-3 py-2 font-mono text-[9px] tracking-[0.2em] text-white/70 backdrop-blur-xl">
               <span className="h-1.5 w-1.5 rounded-full bg-blue-400 shadow-[0_0_12px_#60a5fa]" />
               PROJECT PREVIEW
             </div>
-          </div>
+            <div className="pointer-events-none absolute right-5 top-5 rounded-full border border-white/15 bg-black/45 px-3 py-2 font-mono text-[9px] tracking-[0.18em] text-white/45 backdrop-blur-xl">
+              HOVER TO INSPECT
+            </div>
+          </motion.div>
 
           <div className="flex flex-col justify-between p-6 sm:p-9 lg:p-10">
             <div>
@@ -507,6 +526,19 @@ export default function ProjectsExperience() {
       </AnimatePresence>
 
       <style>{`
+        .project-detail-overlay { isolation: isolate; }
+        .project-detail-dialog { contain: layout paint; }
+        .project-detail-body {
+          scrollbar-width: thin;
+          scrollbar-color: rgba(255,255,255,.22) transparent;
+        }
+        .project-detail-body::-webkit-scrollbar { width: 6px; }
+        .project-detail-body::-webkit-scrollbar-thumb {
+          border-radius: 999px;
+          background: rgba(255,255,255,.2);
+        }
+        .project-detail-preview { isolation: isolate; }
+        .project-detail-preview img { will-change: transform; }
         .project-experience-shell {
           width: 100%;
           padding: 0 clamp(0px, 1.5vw, 20px) 3.5rem;
