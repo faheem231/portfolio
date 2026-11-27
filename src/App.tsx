@@ -1,6 +1,7 @@
 import { ArrowUpRight, Menu, X } from "lucide-react";
+import HeroName from "@/components/HeroName";
 import { useEffect, useState } from "react";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import WelcomeScreen from "@/components/WelcomeScreen";
 import AIEngineerSection from "@/components/AIEngineerSection";
 import Showcase from "./components/Showcase";
@@ -17,15 +18,7 @@ export default function App() {
   const [time, setTime] = useState("");
   const [mobileMenu, setMobileMenu] = useState(false);
 
-  const text = "FAHEEM";
-  const [displayed, setDisplayed] = useState("");
-  const [colorMode, setColorMode] = useState(0);
 
-  const colors = [
-    "bg-gradient-to-b from-white via-gray-200 via-gray-500 to-black text-transparent bg-clip-text",
-    "text-white",
-    "bg-gradient-to-b from-black via-gray-500 via-gray-200 to-white text-transparent bg-clip-text",
-  ];
 
   useEffect(() => {
     const timer = setTimeout(() => setShowWelcome(false), 5000);
@@ -60,16 +53,6 @@ export default function App() {
     return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    setDisplayed("");
-    let i = 0;
-    function type() {
-      setDisplayed(text.slice(0, i + 1));
-      i++;
-      if (i < text.length) setTimeout(type, 200);
-    }
-    type();
-  }, []);
 
   return (
     <Routes>
@@ -218,50 +201,71 @@ export default function App() {
             id="Home"
             className="relative w-full h-screen min-h-[640px] overflow-hidden bg-black"
           >
-            <div className="relative z-10 w-full h-full flex flex-col justify-between px-6 md:px-12 pt-24 pb-10">
-              <h1
-                onClick={() => setColorMode((prev) => (prev + 1) % colors.length)}
-                className={`font-display uppercase leading-[0.85] tracking-[-0.03em] text-[22vw] md:text-[14vw] lg:text-[13rem] cursor-pointer transition-all duration-300 ${colors[colorMode]}`}
-              >
-                {displayed || "\u00A0"}
-              </h1>
 
-              <p className="md:absolute md:top-28 md:right-16
-mt-4 md:mt-0
-text-right
-text-3xl md:text-4xl lg:text-5xl
-leading-[1.05]
-max-w-md
-font-[Poppins] font-bold
-tracking-wide
-text-transparent bg-clip-text
-bg-[length:200%_auto]
-bg-gradient-to-r
-from-white via-white/60 to-white
-animate-[shine_4s_linear_infinite]">
-                Building
+            <div className="relative z-10 w-full h-full flex flex-col justify-between px-6 md:px-12 pt-24 pb-24">
+              <div>
+                <p className="text-xs tracking-[0.3em] text-white/50 uppercase">Portfolio — 2026 — AI &amp; Machine Learning</p>
+                <HeroName />
+              </div>
 
-                <br />
-                Intelligent
-                <br />
-                AI Systems
-                <br />
-                For Tomorrow.
-              </p>
+              <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 mt-auto">
+                <div className="max-w-xl">
+                  <p className="text-2xl md:text-4xl lg:text-5xl leading-tight font-light text-white">
+                    Building <span className="text-white/60">what comes next.</span>
+                  </p>
+                  <p className="mt-5 text-sm sm:text-base leading-relaxed max-w-lg text-white/65">
+                    AI &amp; Machine Learning student exploring intelligent systems through practical work in Python, machine learning and generative AI.
+                  </p>
+                </div>
 
-              <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mt-auto">
-                <p className="relative text-sm sm:text-base lg:text-xl
-    leading-relaxed max-w-md
-    font-[Poppins] font-medium
-    tracking-wide
-    text-transparent bg-clip-text
-    bg-[length:200%_auto]
-    bg-gradient-to-r
-    from-white via-white/60 to-white
-    animate-[shine_4s_linear_infinite]">
-                  AI & Machine Learning Student building intelligent applications with Python, Machine Learning, Deep Learning, NLP and Generative AI.                </p>
+                <motion.div
+                  className="flex flex-wrap gap-4"
+                  initial={{ opacity: 0, y: 24 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1.0, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  {/* Primary button — filled pill */}
+                  <motion.button
+                    onClick={() => document.getElementById("showcase")?.scrollIntoView({ behavior: "smooth" })}
+                    whileHover={{ scale: 1.04 }}
+                    whileTap={{ scale: 0.97 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                    className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-white px-7 py-3 text-[11px] font-medium tracking-[0.18em] text-black uppercase"
+                  >
+                    {/* shimmer sweep */}
+                    <span
+                      aria-hidden
+                      className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-black/10 to-transparent transition-transform duration-500 group-hover:translate-x-full"
+                    />
+                    <span className="relative">Explore My Work</span>
+                    <motion.span
+                      className="relative"
+                      animate={{ x: [0, 3, 0] }}
+                      transition={{ repeat: Infinity, duration: 1.6, ease: "easeInOut" }}
+                    >
+                      <ArrowUpRight size={14} />
+                    </motion.span>
+                  </motion.button>
 
-
+                  {/* Secondary button — outline pill */}
+                  <motion.button
+                    onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
+                    whileHover={{ scale: 1.04, borderColor: "rgba(255,255,255,0.6)" }}
+                    whileTap={{ scale: 0.97 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                    className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full border border-white/25 bg-white/[0.04] px-7 py-3 text-[11px] font-medium tracking-[0.18em] text-white uppercase backdrop-blur-sm"
+                  >
+                    {/* hover fill */}
+                    <motion.span
+                      aria-hidden
+                      className="absolute inset-0 rounded-full bg-white/[0.07] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                    />
+                    <span className="relative">Get In Touch</span>
+                    <span className="relative">
+                      <ArrowUpRight size={14} />
+                    </span>
+                  </motion.button>
+                </motion.div>
               </div>
             </div>
           </section>
