@@ -10,12 +10,10 @@ export default function AIEngineerSection() {
   const inView = useInView(ref, { amount: 0.4 });
 
   const [showCard, setShowCard] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const [cardReady, setCardReady] = useState(false);
   const [goAbout, setGoAbout] = useState(false);
 
   const navigate = useNavigate();
-
-  useEffect(() => setMounted(true), []);
 
   // page exit → navigate after animation
   useEffect(() => {
@@ -167,7 +165,10 @@ export default function AIEngineerSection() {
             initial={{ opacity: 0, y: 30 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.9 }}
-            onClick={() => setShowCard((s) => !s)}
+            onClick={() => {
+              setCardReady(true);
+              setShowCard((s) => !s);
+            }}
             className="inline-flex items-center gap-2 border border-accent text-accent px-6 py-3 text-xs tracking-[0.25em] uppercase font-semibold hover:bg-accent hover:text-black transition-all duration-200 rounded-full relative z-[100] cursor-pointer"
           >
             {showCard ? "Hide Card" : "Show Card"}
@@ -203,7 +204,7 @@ export default function AIEngineerSection() {
       </div>
 
       {/* 3D ID CARD (State 1: Hidden on default, State 2: Visible on Show Card) */}
-      {mounted && (
+      {cardReady && (
         <div
           className={`
             absolute inset-0 z-[10] transition-all duration-[450ms] ease-in-out
@@ -215,7 +216,7 @@ export default function AIEngineerSection() {
           `}
         >
           <Suspense fallback={null}>
-            <BandCard />
+            <BandCard active={showCard} />
           </Suspense>
         </div>
       )}

@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { FaWhatsapp, FaEnvelope } from "react-icons/fa";
+import { FaWhatsapp, FaEnvelope, FaInstagram, FaGithub, FaLinkedin } from "react-icons/fa";
 import { motion } from "framer-motion";
-import { FaInstagram, FaGithub, FaLinkedin } from "react-icons/fa";
 
 
 export default function ContactSection() {

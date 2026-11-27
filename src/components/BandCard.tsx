@@ -42,7 +42,7 @@ const TEXTURE_PATH = "/assets/new.png";
 useGLTF.preload(GLTF_PATH);
 useTexture.preload(TEXTURE_PATH);
 
-export default function BandCard() {
+export default function BandCard({ active }: { active: boolean }) {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -69,6 +69,7 @@ export default function BandCard() {
     >
       <Suspense fallback={null}>
         <Canvas
+          frameloop={active ? "always" : "never"}
           gl={{
             alpha: true,
             antialias: true,
@@ -194,6 +195,10 @@ function Band({
         new THREE.Vector3(),
         new THREE.Vector3(),
       ])
+  );
+
+  const ropePoints = useRef<THREE.Vector3[]>(
+    Array.from({ length: 33 }, () => new THREE.Vector3())
   );
 
   const [dragged, drag] =
@@ -353,9 +358,11 @@ function Band({
       );
 
       if (band.current?.geometry) {
-        band.current.geometry.setPoints(
-          curve.getPoints(32)
-        );
+        const points = ropePoints.current;
+        for (let i = 0; i <= 32; i++) {
+          curve.getPoint(i / 32, points[i]);
+        }
+        band.current.geometry.setPoints(points);
       }
 
       ang.copy(card.current.angvel());

@@ -1,45 +1,34 @@
 import { motion } from "framer-motion";
-import { ArrowLeft, Download } from "lucide-react";
+import { ArrowLeft, Download, ExternalLink, Cpu, Brain, Code2, Database } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
 import NeuralBackground from "@/components/NeuralBackground";
-// @ts-ignore
-import html2pdf from "html2pdf.js";
+
+const fadeUp = (delay = 0) => ({
+  initial: { opacity: 0, y: 32 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] as const },
+});
+
+const skills = [
+  { icon: <Brain size={13} />, label: "Machine Learning" },
+  { icon: <Cpu size={13} />, label: "Deep Learning" },
+  { icon: <Code2 size={13} />, label: "Python" },
+  { icon: <Database size={13} />, label: "NLP" },
+  { icon: <Brain size={13} />, label: "Computer Vision" },
+  { icon: <Cpu size={13} />, label: "Generative AI" },
+  { icon: <Code2 size={13} />, label: "LangChain" },
+  { icon: <Database size={13} />, label: "Data Science" },
+];
+
+const stats = [
+  { value: "2", label: "Projects Built" },
+  { value: "B.Tech", label: "AI & ML Degree" },
+  { value: "2029", label: "Expected Grad" },
+];
 
 export default function About() {
   const navigate = useNavigate();
-  const text = "About Myself";
 
-  const [displayedText, setDisplayedText] = useState("");
-  const [countdown, setCountdown] = useState<number | null>(null);
-  const [downloading, setDownloading] = useState(false);
-
-  // TYPING EFFECT
-  useEffect(() => {
-    let index = 0;
-    let interval: ReturnType<typeof setInterval>;
-
-    const startTyping = () => {
-      setDisplayedText("");
-      interval = setInterval(() => {
-        index++;
-        setDisplayedText(text.slice(0, index));
-
-        if (index === text.length) {
-          clearInterval(interval);
-          setTimeout(() => {
-            index = 0;
-            startTyping();
-          }, 5000);
-        }
-      }, 120);
-    };
-
-    startTyping();
-    return () => clearInterval(interval);
-  }, []);
-
-  // DOWNLOAD FUNCTION - FIXED
   const handleDownload = () => {
     const link = document.createElement("a");
     link.href = "/assets/resume.pdf";
@@ -50,264 +39,230 @@ export default function About() {
   };
 
   return (
-    <div className="relative min-h-screen bg-black overflow-hidden text-white px-4 sm:px-6 py-10">
+    <div className="relative min-h-screen bg-black text-white overflow-x-hidden">
       <NeuralBackground />
-      {/* ANIMATED BACKGROUND EFFECTS */}
+
+      {/* subtle radial glow top-right */}
       <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-white/5 rounded-full blur-3xl opacity-20" />
-        <div className="absolute bottom-20 right-10 w-72 h-72 bg-white/5 rounded-full blur-3xl opacity-20" />
+        <div className="absolute -top-32 -right-32 w-[600px] h-[600px] rounded-full bg-white/[0.03] blur-[120px]" />
+        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-white/[0.02] blur-[100px]" />
       </div>
 
-      {/* BACK BUTTON */}
+      {/* ── Back button ── */}
       <motion.button
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.5 }}
+        {...fadeUp(0)}
         onClick={() => navigate(-1)}
-        className="
-          fixed
-          top-5
-          left-5
-          z-50
-          flex
-          items-center
-          gap-2
-          px-4
-          py-2
-          rounded-full
-          border
-          border-white/15
-          bg-white/8
-          backdrop-blur-xl
-          hover:bg-white/15
-          hover:border-white/30
-          transition-all
-          duration-300
-          shadow-lg
-        "
+        className="fixed top-6 left-6 z-50 inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/50 backdrop-blur-xl px-4 py-2 text-xs tracking-widest uppercase text-white/70 hover:text-white hover:border-white/30 transition-all duration-300"
       >
-        <ArrowLeft size={18} />
+        <ArrowLeft size={14} />
         <span className="hidden sm:inline">Back</span>
       </motion.button>
 
-      {/* MAIN CONTENT */}
-      <div className="relative z-20 flex flex-col items-center justify-center min-h-screen gap-8">
+      {/* ══════════════════════════════════════════
+          MAIN GRID
+      ══════════════════════════════════════════ */}
+      <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 pt-24 pb-20">
 
-        {/* IMAGE SECTION */}
-        <motion.div
-          initial={{ opacity: 0, y: -40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{
-            duration: 1,
-            ease: [0.22, 1, 0.36, 1],
-          }}
-          className="flex flex-col items-center"
+        {/* ── Page label ── */}
+        <motion.p
+          {...fadeUp(0.1)}
+          className="text-[10px] tracking-[0.4em] text-white/40 uppercase mb-3"
         >
-          <img
-            src="/assets/faheem.png"
-            alt="Faheem"
-            className="
-              w-[200px]
-              sm:w-[280px]
-              md:w-[320px]
-              rounded-2xl
-              border
-              border-white/15
-              object-cover
-              shadow-[0_20px_60px_rgba(0,0,0,0.6)]
-              hover:border-white/25
-              transition-all
-              duration-300
-            "
-          />
+          About — Mohammed Faheem
+        </motion.p>
 
-          {/* DIVIDER LINE */}
-          <div
-            className="
-              mt-6
-              h-[1px]
-              bg-gradient-to-r
-              from-transparent
-              via-white/20
-              to-transparent
-              w-[90vw]
-              sm:w-[400px]
-              md:w-[500px]
-            "
-          />
-        </motion.div>
-
-        {/* GLASS BOX CONTAINER */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{
-            duration: 1,
-            delay: 0.2,
-            ease: [0.22, 1, 0.36, 1],
-          }}
-          className="
-            relative
-            w-full
-            max-w-4xl
-            h-[500px]
-            sm:h-[550px]
-            md:h-[600px]
-            rounded-3xl
-            border
-            border-white/10
-            bg-white/5
-            backdrop-blur-3xl
-            overflow-hidden
-            shadow-[0_20px_70px_rgba(0,0,0,0.5)]
-            group
-          "
+        {/* ── Headline ── */}
+        <motion.h1
+          {...fadeUp(0.18)}
+          className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-none mb-16"
+          style={{ fontFamily: "'Anton', sans-serif", letterSpacing: "0.01em" }}
         >
-          {/* GLASS LIGHT EFFECT */}
-          <div className="absolute inset-0 bg-gradient-to-br from-white/8 via-transparent to-transparent pointer-events-none" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
+          Building AI<br />
+          <span className="text-white/30">That Matters.</span>
+        </motion.h1>
 
-          {/* HEADER SECTION */}
-          <div
-            className="
-              relative
-              z-20
-              flex
-              items-center
-              justify-center
-              px-6
-              py-6
-              sm:py-8
-              border-b
-              border-white/10
-              bg-black/30
-              backdrop-blur-2xl
-            "
-          >
-            <h1
-              className="
-                text-3xl
-                sm:text-4xl
-                md:text-5xl
-                font-extrabold
-                tracking-tight
-              "
-            >
-              {displayedText}
-              <span className="animate-pulse ml-2">|</span>
-            </h1>
-          </div>
+        {/* ── Two-column grid ── */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
 
-          {/* SCROLLABLE CONTENT */}
-          <div
-            className="
-              relative
-              z-10
-              h-[calc(100%-80px)]
-              overflow-y-auto
-              px-6
-              sm:px-10
-              md:px-12
-              py-8
-              scrollbar-thin
-              scrollbar-track-transparent
-              scrollbar-thumb-white/10
-              hover:scrollbar-thumb-white/20
-            "
-          >
-            <div
-              className="
-                text-white/70
-                text-sm
-                sm:text-base
-                leading-8
-                tracking-wide
-                space-y-6
-              "
-            >
+          {/* ════ LEFT — Photo + Stats ════ */}
+          <motion.div {...fadeUp(0.26)} className="flex flex-col gap-6">
+
+            {/* Photo card */}
+            <div className="relative group">
+              <div className="absolute -inset-px rounded-2xl bg-gradient-to-br from-white/15 via-white/5 to-transparent opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="relative rounded-2xl overflow-hidden border border-white/10 bg-white/[0.03]">
+                <img
+                  src="/assets/faheem.png"
+                  alt="Mohammed Faheem"
+                  className="w-full object-cover object-top"
+                  style={{ maxHeight: "480px" }}
+                />
+                {/* overlay gradient at bottom */}
+                <div className="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-t from-black/80 to-transparent" />
+                {/* name badge */}
+                <div className="absolute bottom-5 left-5 right-5">
+                  <p className="text-[10px] tracking-[0.3em] text-white/50 uppercase mb-1">AI & ML Student</p>
+                  <p className="text-lg font-semibold tracking-wide">Mohammed Faheem</p>
+                </div>
+                {/* floating status dot */}
+                <div className="absolute top-4 right-4 flex items-center gap-2 rounded-full border border-white/15 bg-black/60 backdrop-blur-md px-3 py-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+                  <span className="text-[9px] tracking-[0.25em] uppercase text-white/60">Open to work</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Stats row */}
+            <div className="grid grid-cols-3 gap-3">
+              {stats.map((s, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.35 + i * 0.08, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                  className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-4 text-center"
+                >
+                  <p className="text-2xl font-bold tracking-tight">{s.value}</p>
+                  <p className="text-[10px] tracking-[0.2em] text-white/40 uppercase mt-1">{s.label}</p>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Skills */}
+            <div>
+              <p className="text-[10px] tracking-[0.35em] text-white/35 uppercase mb-3">Core Skills</p>
+              <div className="flex flex-wrap gap-2">
+                {skills.map((sk, i) => (
+                  <motion.span
+                    key={i}
+                    initial={{ opacity: 0, scale: 0.85 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.5 + i * 0.05, duration: 0.4 }}
+                    className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-[11px] text-white/65 hover:border-white/25 hover:text-white/90 transition-all duration-200 cursor-default"
+                  >
+                    {sk.icon}
+                    {sk.label}
+                  </motion.span>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+
+          {/* ════ RIGHT — Bio + Resume ════ */}
+          <motion.div {...fadeUp(0.34)} className="flex flex-col gap-8">
+
+            {/* Bio paragraphs */}
+            <div className="space-y-5 text-white/65 text-[15px] leading-[1.85]">
               <p>
-                I'm Mohammed Faheem, an AI Enthusiast and B.Tech Artificial Intelligence & Machine Learning student passionate about building intelligent applications that solve real-world problems. I enjoy exploring new technologies and continuously improving my skills through hands-on projects.
+                I'm an <span className="text-white font-medium">AI & Machine Learning</span> B.Tech student passionate about building intelligent applications that solve real-world problems — from NLP pipelines to generative AI products.
               </p>
-
               <p>
-                My interest in technology started with programming and gradually evolved into Artificial Intelligence, Machine Learning, and Data Science. Since then, I've been dedicated to learning, experimenting, and creating practical AI solutions.
+                My journey started with programming and evolved into deep exploration of <span className="text-white font-medium">Machine Learning, Deep Learning, Computer Vision,</span> and <span className="text-white font-medium">Generative AI</span>. I work primarily in Python, using modern AI frameworks and best practices.
               </p>
-
               <p>
-                I work primarily with Python and enjoy building projects using Machine Learning, Deep Learning, Natural Language Processing, Computer Vision, and Generative AI. I'm constantly expanding my knowledge by learning modern AI frameworks and industry best practices.
+                I'm currently <span className="text-white font-medium">actively building projects</span> — from NLP tools to generative AI experiments. Each project is a step toward mastering intelligent systems.
               </p>
-
               <p>
-                One of my featured projects is ResumeAI, an AI-powered resume analyzer that evaluates ATS compatibility, extracts skills, and provides personalized recommendations to help users improve their resumes.
-              </p>
-
-              <p>
-                Outside of coding, I enjoy exploring emerging AI technologies, reading about the latest advancements, and challenging myself to build innovative applications that combine creativity with intelligent systems.
-              </p>
-
-              <p>
-                My long-term goal is to become an AI Engineer and contribute to building AI products that create meaningful impact and improve people's lives.
+                Long-term, I want to become an <span className="text-white font-medium">AI Engineer</span> and ship products that create meaningful impact.
               </p>
             </div>
-          </div>
-        </motion.div>
 
-        {/* DOWNLOAD BUTTON */}
-        <motion.button
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{
-            duration: 1,
-            delay: 0.4,
-          }}
-          onClick={handleDownload}
-          disabled={downloading}
-          className="
-            group
-            relative
-            overflow-hidden
-            flex
-            items-center
-            justify-center
-            gap-3
-            px-8
-            sm:px-10
-            py-3
-            sm:py-4
-            rounded-2xl
-            border
-            border-white/15
-            bg-white/8
-            backdrop-blur-xl
-            hover:bg-white/15
-            hover:border-white/30
-            disabled:opacity-50
-            disabled:cursor-not-allowed
-            transition-all
-            duration-300
-            shadow-[0_10px_40px_rgba(0,0,0,0.4)]
-            hover:shadow-[0_15px_50px_rgba(255,255,255,0.08)]
-          "
-        >
-          {/* BUTTON GLOW EFFECT */}
-          <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 opacity-0 group-hover:opacity-100 transition-all duration-500" />
+            {/* ── Resume preview card ── */}
+            <div>
+              <p className="text-[10px] tracking-[0.35em] text-white/35 uppercase mb-3">Resume</p>
+              <div className="relative group rounded-2xl border border-white/10 bg-white/[0.03] overflow-hidden">
+                {/* corner glow */}
+                <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full bg-white/[0.04] blur-2xl pointer-events-none" />
 
-          {/* BUTTON CONTENT */}
-          <div className="relative z-10 flex items-center gap-3">
-            <Download
-              size={20}
-              className="
-                group-hover:scale-110
-                group-hover:-translate-y-1
-                transition-all
-                duration-300
-              "
-            />
-            <span className="font-semibold tracking-wide">
-              {downloading ? `Downloading in ${countdown}s` : "Download Resume"}
-            </span>
-          </div>
-        </motion.button>
+                {/* resume visual — styled terminal block */}
+                <div className="relative overflow-hidden bg-[#0d0d0d] px-6 pt-5 pb-8 font-mono text-xs leading-6">
+                  {/* traffic lights */}
+                  <div className="flex gap-1.5 mb-5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-red-500/70" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/70" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-green-500/70" />
+                    <span className="ml-3 text-white/20 text-[10px] tracking-widest">resume.pdf</span>
+                  </div>
+                  {/* fake code lines */}
+                  <div className="space-y-1 text-white/50">
+                    <p><span className="text-white/25">01</span>  <span className="text-blue-400/80">name</span>      <span className="text-white/20">:</span> <span className="text-green-400/70">Mohammed Faheem</span></p>
+                    <p><span className="text-white/25">02</span>  <span className="text-blue-400/80">role</span>      <span className="text-white/20">:</span> <span className="text-green-400/70">AI & ML Student</span></p>
+                    <p><span className="text-white/25">03</span>  <span className="text-blue-400/80">degree</span>    <span className="text-white/20">:</span> <span className="text-green-400/70">B.Tech AIML</span></p>
+                    <p><span className="text-white/25">04</span>  <span className="text-blue-400/80">grad</span>      <span className="text-white/20">:</span> <span className="text-yellow-400/70">2029</span></p>
+                    <p><span className="text-white/25">05</span>  <span className="text-blue-400/80">skills</span>    <span className="text-white/20">:</span> <span className="text-purple-400/70">[ Python, ML, DL, NLP, GenAI ]</span></p>
+                    <p><span className="text-white/25">06</span>  <span className="text-blue-400/80">projects</span>  <span className="text-white/20">:</span> <span className="text-yellow-400/70">2</span> <span className="text-white/25">// and counting...</span></p>
+                    <p><span className="text-white/25">07</span>  <span className="text-blue-400/80">status</span>    <span className="text-white/20">:</span> <span className="text-green-400/70">building 🚀</span></p>
+                    <p><span className="text-white/25">08</span>  <span className="text-blue-400/80">goal</span>      <span className="text-white/20">:</span> <span className="text-green-400/70">AI Engineer</span></p>
+                  </div>
+                  {/* blinking cursor */}
+                  <span className="inline-block w-1.5 h-3.5 bg-white/50 animate-pulse mt-2 ml-6" />
+                  {/* bottom fade */}
+                  <div className="absolute bottom-0 inset-x-0 h-10 bg-gradient-to-t from-[#0d0d0d] to-transparent pointer-events-none" />
+                </div>
+
+                  {/* hover view button */}
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <a
+                      href="/assets/resume.pdf"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 rounded-full bg-white/90 px-5 py-2.5 text-xs font-medium tracking-widest uppercase text-black hover:bg-white transition-colors"
+                    >
+                      <ExternalLink size={12} />
+                      View Full
+                    </a>
+                  </div>
+
+                {/* footer strip */}
+                <div className="flex items-center justify-between px-5 py-4 border-t border-white/[0.07]">
+                  <div>
+                    <p className="text-xs font-medium text-white/80">Mohammed_Faheem_Resume.pdf</p>
+                    <p className="text-[10px] text-white/35 mt-0.5">Updated 2026</p>
+                  </div>
+                  <motion.button
+                    onClick={handleDownload}
+                    whileHover={{ scale: 1.06 }}
+                    whileTap={{ scale: 0.95 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                    className="group/btn relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-white px-5 py-2.5 text-[11px] font-medium tracking-[0.15em] uppercase text-black"
+                  >
+                    <span
+                      aria-hidden
+                      className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-black/10 to-transparent transition-transform duration-500 group-hover/btn:translate-x-full"
+                    />
+                    <Download size={12} className="relative" />
+                    <span className="relative">Download</span>
+                  </motion.button>
+                </div>
+              </div>
+            </div>
+
+            {/* ── Contact strip ── */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.8, duration: 0.6 }}
+              className="flex flex-wrap gap-3 pt-2"
+            >
+              {[
+                { label: "GitHub", href: "https://github.com/faheemop" },
+                { label: "LinkedIn", href: "https://linkedin.com/in/mohammed-faheem" },
+                { label: "Email", href: "mailto:faheem@example.com" },
+              ].map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-white/15 px-4 py-2 text-[11px] tracking-[0.2em] uppercase text-white/55 hover:text-white hover:border-white/35 transition-all duration-200"
+                >
+                  {link.label}
+                  <ExternalLink size={10} />
+                </a>
+              ))}
+            </motion.div>
+          </motion.div>
+        </div>
       </div>
     </div>
   );
