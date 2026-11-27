@@ -505,6 +505,75 @@ export default function ProjectsExperience() {
           />
         )}
       </AnimatePresence>
+
+      <style>{`
+        .project-experience-shell {
+          width: 100%;
+          padding: 0 clamp(0px, 1.5vw, 20px) 3.5rem;
+          perspective: 1400px;
+        }
+        .project-experience-track {
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+          overscroll-behavior-x: contain;
+          scroll-padding-inline: 3vw;
+        }
+        .project-experience-track::-webkit-scrollbar { display: none; }
+        .project-experience-card {
+          min-height: 430px;
+          width: 100%;
+          border-color: rgba(255,255,255,.13);
+          background: #090a0e;
+          transform: perspective(1200px) rotateX(var(--rotate-x, 0deg)) rotateY(var(--rotate-y, 0deg));
+          transform-style: preserve-3d;
+          transition: transform 260ms cubic-bezier(.2,.8,.2,1), border-color 350ms ease, box-shadow 350ms ease;
+          box-shadow: 0 22px 70px rgba(0,0,0,.35);
+          isolation: isolate;
+        }
+        .project-experience-card:hover,
+        .project-experience-card.is-active {
+          border-color: rgba(255,255,255,.32);
+          box-shadow: 0 30px 90px rgba(0,0,0,.55), 0 0 55px rgba(var(--project-accent),.10);
+        }
+        .project-card-image { overflow: hidden; }
+        .project-card-image img {
+          opacity: .72;
+          transform: scale(1.015);
+          transition: transform 900ms cubic-bezier(.16,1,.3,1), opacity 600ms ease;
+          will-change: transform;
+        }
+        .project-experience-card:hover .project-card-image img {
+          opacity: .96;
+          transform: scale(1.09);
+        }
+        .project-card-scrim {
+          background: linear-gradient(180deg, rgba(4,5,8,.28) 0%, rgba(4,5,8,.08) 36%, rgba(4,5,8,.92) 100%);
+        }
+        .project-card-glow {
+          opacity: 0;
+          background: radial-gradient(420px circle at var(--pointer-x,50%) var(--pointer-y,50%), rgba(var(--project-accent),.22), transparent 58%);
+          transition: opacity 350ms ease;
+          mix-blend-mode: screen;
+        }
+        .project-experience-card:hover .project-card-glow { opacity: 1; }
+        .project-open-icon { box-shadow: 0 0 0 rgba(255,255,255,0); }
+        .project-experience-card:hover .project-open-icon {
+          transform: rotate(45deg);
+          background: rgba(255,255,255,.16);
+          box-shadow: 0 0 30px rgba(255,255,255,.16);
+        }
+        .project-card-title { text-shadow: 0 4px 35px rgba(0,0,0,.55); }
+        @media (max-width: 640px) {
+          .project-experience-shell { padding-inline: 0; }
+          .project-experience-card { min-height: 390px; }
+          .project-card-image img { opacity: .62; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .project-experience-card,
+          .project-card-image img,
+          .project-open-icon { transition: none !important; }
+        }
+      `}</style>
     </section>
   );
 }
