@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import type { CSSProperties } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Float, Html, RoundedBox } from "@react-three/drei";
 import * as THREE from "three";
@@ -54,7 +55,7 @@ function Panel({
   return (
     <Float speed={active ? 2.4 : 1.1} rotationIntensity={0.08} floatIntensity={active ? 0.22 : 0.12}>
       <group position={position} rotation={rotation}>
-        <RoundedBox args={[2.28, 1.42, 0.09]} radius={0.12} smoothness={4}>
+        <RoundedBox args={[2.55, 1.7, 0.09]} radius={0.12} smoothness={4}>
           <meshPhysicalMaterial
             color={active ? "#263D68" : "#101827"}
             metalness={0.35}
@@ -69,7 +70,7 @@ function Panel({
             className={`ai-workspace-panel ${active ? "is-active" : ""}`}
             onPointerEnter={() => onActivate(kind)}
             onPointerLeave={() => onActivate(null)}
-            style={{ "--panel-accent": config.accent } as React.CSSProperties}
+            style={{ "--panel-accent": config.accent } as CSSProperties}
           >
             <div className="ai-panel-topline">
               <span>{config.label}</span>
@@ -96,8 +97,11 @@ function WorkspaceScene() {
   const group = useRef<THREE.Group>(null);
   const [active, setActive] = useState<PanelKind | null>(null);
 
-  useFrame(({ pointer }, delta) => {
+  useFrame(({ pointer, size }, delta) => {
     if (!group.current) return;
+    const targetScale = size.width < 480 ? 0.58 : size.width < 767 ? 0.68 : size.width < 1024 ? 0.84 : 1;
+    const scale = THREE.MathUtils.damp(group.current.scale.x, targetScale, 3, delta);
+    group.current.scale.setScalar(scale);
     const targetY = pointer.x * 0.12;
     const targetX = -pointer.y * 0.07;
     group.current.rotation.y = THREE.MathUtils.damp(group.current.rotation.y, targetY, 3.2, delta);
@@ -112,7 +116,7 @@ function WorkspaceScene() {
       <group ref={group}>
         <Panel
           kind="python"
-          position={[-1.55, 0.38, 0]}
+          position={[-2.55, 0.38, 0]}
           rotation={[0.02, 0.13, -0.055]}
           active={active === "python"}
           onActivate={setActive}
@@ -126,7 +130,7 @@ function WorkspaceScene() {
         />
         <Panel
           kind="generative"
-          position={[1.55, 0.34, -0.12]}
+          position={[2.55, 0.34, -0.12]}
           rotation={[0.02, -0.15, 0.055]}
           active={active === "generative"}
           onActivate={setActive}
