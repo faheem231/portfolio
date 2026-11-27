@@ -26,7 +26,7 @@ export default function App() {
     return () => {
       document.body.style.overflow = "auto";
     };
-  }, [showWelcome, mobileMenu]);
+  }, [mobileMenu]);
 
   useEffect(() => {
     const updateTime = () => {
@@ -239,7 +239,7 @@ export default function App() {
         @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-33.333%); } }
         .animate-marquee { animation: marquee 22s linear infinite; }
         .hero-film { isolation:isolate; z-index:3; min-height:clamp(650px,86svh,850px); color:#f4f6fa; background:#03060b; }
-        .hero-film-backdrop { position:absolute; inset:0; overflow:hidden; z-index:-1; pointer-events:none; background:radial-gradient(ellipse at 51% 42%,#111c30 0%,#080d17 35%,#03060b 76%); }
+         .hero-film-backdrop { position:absolute; inset:0; overflow:hidden; z-index:0; pointer-events:none; background:radial-gradient(ellipse at 51% 42%,#111c30 0%,#080d17 35%,#03060b 76%); }
         .hero-film-blue-glow { position:absolute; width:min(72vw,1050px); height:min(48vw,620px); left:50%; top:35%; transform:translate(-50%,-50%); border-radius:50%; background:radial-gradient(ellipse,rgba(42,93,170,.24),rgba(22,53,99,.13) 34%,transparent 72%); filter:blur(26px); animation:film-glow-breathe 12s ease-in-out infinite alternate; }
         .hero-film-beam { position:absolute; top:-45%; width:1px; height:145%; opacity:0; transform-origin:top; background:linear-gradient(180deg,transparent,rgba(142,181,239,.2) 53%,rgba(110,158,231,.06) 80%,transparent); filter:blur(1px); }
         .hero-film-beam-one { left:29%; transform:rotate(24deg); animation:film-beam-reveal 2.8s ease-out .4s forwards; }
@@ -271,7 +271,7 @@ export default function App() {
         .hero-film-button-secondary:hover { border-color:rgba(207,222,245,.65); background:rgba(255,255,255,.08); }
         .hero-film-scroll { display:flex; align-items:center; gap:10px; color:rgba(185,201,224,.48); font:7px/1 ui-monospace,monospace; letter-spacing:.18em; white-space:nowrap; }
         .hero-film-scroll-mark { width:26px; height:1px; background:linear-gradient(90deg,#b9cde9,transparent); animation:film-scroll-pulse 2.8s ease-in-out infinite; }
-        .hero-film-index { position:absolute; right:22px; top:52%; color:rgba(190,207,233,.32); font:8px/1 ui-monospace,monospace; letter-spacing:.2em; writing-mode:vertical-rl; }
+        .hero-film-index { position:absolute; z-index:2; right:22px; top:52%; color:rgba(190,207,233,.32); font:8px/1 ui-monospace,monospace; letter-spacing:.2em; writing-mode:vertical-rl; }
         @keyframes film-glow-breathe { from { opacity:.55; transform:translate(-50%,-50%) scale(.94); } to { opacity:1; transform:translate(-50%,-50%) scale(1.06); } }
         @keyframes film-beam-reveal { 0% { opacity:0; } 35% { opacity:.8; } 100% { opacity:.28; } }
         @keyframes film-scroll-pulse { 50% { opacity:.3; transform:scaleX(.65); transform-origin:left; } }
