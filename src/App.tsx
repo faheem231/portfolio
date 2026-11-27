@@ -277,10 +277,10 @@ export default function App() {
           <style>{`
         @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-33.333%); } }
         .animate-marquee { animation: marquee 22s linear infinite; }
-        .hero-film { isolation:isolate; z-index:3; min-height:clamp(650px,86svh,850px); color:#f4f6fa; background:#03060b; }
-         .hero-film-backdrop { position:absolute; inset:0; overflow:hidden; z-index:0; pointer-events:none; background:radial-gradient(ellipse at 51% 42%,#111c30 0%,#080d17 35%,#03060b 76%); }
-        .hero-digital-mesh { position:absolute; inset:0; width:100%; height:100%; opacity:.52; mix-blend-mode:screen; }
-        .hero-digital-architecture { position:absolute; inset:0; perspective:900px; transform-style:preserve-3d; opacity:.72; }
+        .hero-film { isolation:isolate; z-index:1; min-height:clamp(650px,86svh,850px); color:#f4f6fa; background:transparent; }
+         .hero-film-backdrop { position:absolute; inset:0; overflow:hidden; z-index:0; pointer-events:none; background:radial-gradient(ellipse at 51% 42%,rgba(17,28,48,.62) 0%,rgba(8,13,23,.48) 42%,rgba(3,6,11,.72) 100%); }
+        .hero-digital-mesh { position:absolute; inset:0; width:100%; height:100%; opacity:.2; mix-blend-mode:screen; }
+        .hero-digital-architecture { position:absolute; inset:0; perspective:900px; transform-style:preserve-3d; opacity:.28; }
         .hero-digital-portal { position:absolute; bottom:17%; width:clamp(105px,13vw,190px); height:clamp(230px,42vh,390px); border:1px solid rgba(123,170,232,.13); border-bottom:0; transform:rotateY(-18deg) skewY(-3deg); background:linear-gradient(180deg,rgba(35,72,120,.035),rgba(65,112,180,.012) 55%,transparent); box-shadow:inset 0 0 36px rgba(74,126,197,.035),0 0 35px rgba(46,99,169,.035); }
         .hero-digital-portal::before,.hero-digital-portal::after { content:""; position:absolute; top:0; bottom:0; width:1px; background:linear-gradient(180deg,transparent,rgba(151,190,241,.32),transparent); }
         .hero-digital-portal::before { left:12px; } .hero-digital-portal::after { right:12px; }
