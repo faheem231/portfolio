@@ -196,6 +196,37 @@ export default function App() {
           <section id="Home" className="hero-film relative w-full overflow-hidden">
             <div className="hero-film-backdrop" aria-hidden="true">
               <div className="hero-film-blue-glow" />
+              <div className="hero-digital-architecture" aria-hidden="true">
+                <div className="hero-digital-portal hero-digital-portal-left" />
+                <div className="hero-digital-portal hero-digital-portal-center" />
+                <div className="hero-digital-portal hero-digital-portal-right" />
+                <div className="hero-digital-orbit hero-digital-orbit-one" />
+                <div className="hero-digital-orbit hero-digital-orbit-two" />
+              </div>
+              <svg className="hero-digital-mesh" viewBox="0 0 1440 760" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                <defs>
+                  <linearGradient id="digitalLine" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0" stopColor="#6d9bd8" stopOpacity="0" />
+                    <stop offset=".5" stopColor="#9fc5f5" stopOpacity=".28" />
+                    <stop offset="1" stopColor="#6d9bd8" stopOpacity="0" />
+                  </linearGradient>
+                </defs>
+                <g fill="none" stroke="url(#digitalLine)" strokeWidth="1">
+                  <path d="M0 250 L260 190 L480 285 L720 155 L960 265 L1180 175 L1440 250" />
+                  <path d="M0 390 L250 330 L490 420 L720 300 L960 410 L1190 325 L1440 390" />
+                  <path d="M0 530 L270 455 L500 555 L720 440 L950 550 L1190 460 L1440 530" />
+                  <path d="M260 190 L250 330 L270 455 M480 285 L490 420 L500 555 M720 155 L720 300 L720 440 M960 265 L960 410 L950 550 M1180 175 L1190 325 L1190 460" />
+                </g>
+                <g fill="#a9ccf5" opacity=".42">
+                  <circle cx="260" cy="190" r="2"/><circle cx="480" cy="285" r="2"/><circle cx="720" cy="155" r="2.5"/>
+                  <circle cx="960" cy="265" r="2"/><circle cx="1180" cy="175" r="2"/><circle cx="250" cy="330" r="1.5"/>
+                  <circle cx="490" cy="420" r="1.5"/><circle cx="720" cy="300" r="2"/><circle cx="960" cy="410" r="1.5"/>
+                  <circle cx="1190" cy="325" r="1.5"/>
+                </g>
+              </svg>
+              <div className="hero-digital-particles" aria-hidden="true">
+                <i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i />
+              </div>
               <div className="hero-film-beam hero-film-beam-one" />
               <div className="hero-film-beam hero-film-beam-two" />
               <div className="hero-film-horizon" />
@@ -248,13 +279,40 @@ export default function App() {
         .animate-marquee { animation: marquee 22s linear infinite; }
         .hero-film { isolation:isolate; z-index:3; min-height:clamp(650px,86svh,850px); color:#f4f6fa; background:#03060b; }
          .hero-film-backdrop { position:absolute; inset:0; overflow:hidden; z-index:0; pointer-events:none; background:radial-gradient(ellipse at 51% 42%,#111c30 0%,#080d17 35%,#03060b 76%); }
+        .hero-digital-mesh { position:absolute; inset:0; width:100%; height:100%; opacity:.52; mix-blend-mode:screen; }
+        .hero-digital-architecture { position:absolute; inset:0; perspective:900px; transform-style:preserve-3d; opacity:.72; }
+        .hero-digital-portal { position:absolute; bottom:17%; width:clamp(105px,13vw,190px); height:clamp(230px,42vh,390px); border:1px solid rgba(123,170,232,.13); border-bottom:0; transform:rotateY(-18deg) skewY(-3deg); background:linear-gradient(180deg,rgba(35,72,120,.035),rgba(65,112,180,.012) 55%,transparent); box-shadow:inset 0 0 36px rgba(74,126,197,.035),0 0 35px rgba(46,99,169,.035); }
+        .hero-digital-portal::before,.hero-digital-portal::after { content:""; position:absolute; top:0; bottom:0; width:1px; background:linear-gradient(180deg,transparent,rgba(151,190,241,.32),transparent); }
+        .hero-digital-portal::before { left:12px; } .hero-digital-portal::after { right:12px; }
+        .hero-digital-portal-left { left:7%; transform:rotateY(23deg) skewY(4deg) scale(.82); transform-origin:bottom; }
+        .hero-digital-portal-center { left:50%; bottom:20%; transform:translateX(-50%) rotateY(0deg); width:clamp(150px,19vw,270px); height:clamp(280px,48vh,440px); border-color:rgba(135,181,241,.19); }
+        .hero-digital-portal-right { right:7%; transform:rotateY(-23deg) skewY(-4deg) scale(.82); transform-origin:bottom; }
+        .hero-digital-orbit { position:absolute; left:50%; top:43%; border:1px solid rgba(132,177,235,.12); border-radius:50%; transform:translate(-50%,-50%) rotateX(68deg); }
+        .hero-digital-orbit-one { width:min(54vw,720px); height:min(54vw,720px); animation:digital-orbit-drift 34s linear infinite; }
+        .hero-digital-orbit-two { width:min(39vw,520px); height:min(39vw,520px); border-style:dashed; border-color:rgba(132,177,235,.09); animation:digital-orbit-drift 48s linear infinite reverse; }
+        .hero-digital-particles { position:absolute; inset:0; overflow:hidden; }
+        .hero-digital-particles i { position:absolute; left:var(--px); top:var(--py); width:2px; height:2px; border-radius:50%; background:#c8ddf8; opacity:0; box-shadow:0 0 8px 2px rgba(125,177,240,.3); animation:digital-particle-float var(--pd) ease-in-out var(--delay) infinite; }
+        .hero-digital-particles i:nth-child(1) { --px:12%; --py:30%; --pd:11s; --delay:-4s; }
+        .hero-digital-particles i:nth-child(2) { --px:22%; --py:68%; --pd:13s; --delay:-9s; }
+        .hero-digital-particles i:nth-child(3) { --px:34%; --py:23%; --pd:12s; --delay:-2s; }
+        .hero-digital-particles i:nth-child(4) { --px:43%; --py:58%; --pd:15s; --delay:-11s; }
+        .hero-digital-particles i:nth-child(5) { --px:57%; --py:27%; --pd:12s; --delay:-6s; }
+        .hero-digital-particles i:nth-child(6) { --px:68%; --py:70%; --pd:14s; --delay:-8s; }
+        .hero-digital-particles i:nth-child(7) { --px:78%; --py:35%; --pd:11s; --delay:-3s; }
+        .hero-digital-particles i:nth-child(8) { --px:89%; --py:62%; --pd:16s; --delay:-13s; }
+        .hero-digital-particles i:nth-child(9) { --px:17%; --py:82%; --pd:14s; --delay:-7s; }
+        .hero-digital-particles i:nth-child(10) { --px:74%; --py:17%; --pd:13s; --delay:-10s; }
+        .hero-digital-particles i:nth-child(11) { --px:51%; --py:79%; --pd:15s; --delay:-5s; }
+        .hero-digital-particles i:nth-child(12) { --px:94%; --py:24%; --pd:12s; --delay:-1s; }
+        @keyframes digital-particle-float { 0%,100% { opacity:0; transform:translate3d(0,12px,0) scale(.7); } 35%,65% { opacity:.42; } 50% { transform:translate3d(10px,-28px,0) scale(1.15); } }
+        @keyframes digital-orbit-drift { from { rotate:0deg; } to { rotate:360deg; } }
         .hero-film-blue-glow { position:absolute; width:min(72vw,1050px); height:min(48vw,620px); left:50%; top:35%; transform:translate(-50%,-50%); border-radius:50%; background:radial-gradient(ellipse,rgba(42,93,170,.24),rgba(22,53,99,.13) 34%,transparent 72%); filter:blur(26px); animation:film-glow-breathe 12s ease-in-out infinite alternate; }
         .hero-film-beam { position:absolute; top:-45%; width:1px; height:145%; opacity:0; transform-origin:top; background:linear-gradient(180deg,transparent,rgba(142,181,239,.2) 53%,rgba(110,158,231,.06) 80%,transparent); filter:blur(1px); }
         .hero-film-beam-one { left:29%; transform:rotate(24deg); animation:film-beam-reveal 2.8s ease-out .4s forwards; }
         .hero-film-beam-two { right:25%; transform:rotate(-19deg); animation:film-beam-reveal 3.2s ease-out .85s forwards; }
         .hero-film-horizon { position:absolute; left:-10%; right:-10%; bottom:18%; height:1px; background:linear-gradient(90deg,transparent,rgba(118,165,232,.08),rgba(179,204,240,.38),rgba(118,165,232,.08),transparent); box-shadow:0 0 34px 8px rgba(55,111,195,.12); }
         .hero-film-floor { position:absolute; left:10%; right:10%; bottom:-35%; height:58%; opacity:.3; transform:perspective(500px) rotateX(66deg); transform-origin:top; background:repeating-linear-gradient(90deg,transparent 0,transparent 9.9%,rgba(124,165,225,.12) 10%,transparent 10.15%),repeating-linear-gradient(0deg,transparent 0,transparent 17%,rgba(124,165,225,.1) 17.2%,transparent 17.5%); mask-image:linear-gradient(180deg,rgba(0,0,0,.8),transparent 80%); }
-        .hero-film-vignette { position:absolute; inset:0; background:linear-gradient(180deg,rgba(0,0,0,.45),transparent 25%,transparent 65%,rgba(0,0,0,.72)),radial-gradient(ellipse at center,transparent 34%,rgba(0,0,0,.55) 100%); }
+        .hero-film-vignette { position:absolute; z-index:1; inset:0; background:linear-gradient(180deg,rgba(0,0,0,.48),transparent 25%,transparent 65%,rgba(0,0,0,.72)),radial-gradient(ellipse at center,transparent 28%,rgba(0,0,0,.58) 100%); }
         .hero-film-grain { position:absolute; inset:-50%; opacity:.055; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='.5'/%3E%3C/svg%3E"); pointer-events:none; }
         .hero-film-content { position:relative; z-index:2; width:min(calc(100% - 64px),1440px); min-height:clamp(650px,86svh,850px); margin:0 auto; padding:120px 0 46px; display:flex; flex-direction:column; justify-content:space-between; }
         .hero-film-topline { display:flex; align-items:center; justify-content:space-between; gap:20px; color:rgba(216,226,242,.55); font:9px/1.4 ui-monospace,SFMono-Regular,monospace; letter-spacing:.24em; }
@@ -300,7 +358,7 @@ export default function App() {
           .hero-film-blue-glow { width:120vw; height:90vw; top:42%; }
           .hero-film-floor { left:-10%; right:-10%; }
         }
-        @media(prefers-reduced-motion:reduce) { .animate-marquee,.hero-film-blue-glow,.hero-film-beam,.hero-film-scroll-mark { animation:none!important; } }
+        @media(prefers-reduced-motion:reduce) { .animate-marquee,.hero-film-blue-glow,.hero-film-beam,.hero-film-scroll-mark,.hero-digital-orbit,.hero-digital-particles i { animation:none!important; } }
       `}</style>
 
           <section id="about">
