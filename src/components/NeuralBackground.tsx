@@ -1,167 +1,216 @@
 import { useEffect, useRef } from "react";
 
-type Node = {
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
-  radius: number;
-  depth: number;
-};
-
 export default function NeuralBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const pointerRef = useRef({ x: -1000, y: -1000 });
+  const mouseRef = useRef({ x: -1000, y: -1000, targetX: -1000, targetY: -1000 });
+  const ripplesRef = useRef<{ x: number; y: number; radius: number; maxRadius: number; alpha: number }[]>([]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    const context = canvas?.getContext("2d", { alpha: true });
-    if (!canvas || !context) return;
+    if (!canvas) return;
 
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const mobile = window.matchMedia("(max-width: 767px)").matches;
-    const nodeCount = mobile ? 34 : 78;
-    const linkDistance = mobile ? 112 : 158;
-    const pointerRadius = mobile ? 0 : 210;
-    let width = 0;
-    let height = 0;
-    let dpr = 1;
-    let frame = 0;
-    let running = false;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
 
-    const nodes: Node[] = Array.from({ length: nodeCount }, () => ({
-      x: Math.random() * window.innerWidth,
-      y: Math.random() * window.innerHeight,
-      vx: (Math.random() - 0.5) * 0.24,
-      vy: (Math.random() - 0.5) * 0.24,
-      radius: Math.random() * 1.15 + 0.65,
-      depth: Math.random() * 0.65 + 0.35,
-    }));
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const isMobile = window.innerWidth < 768;
 
-    const resize = () => {
-      width = window.innerWidth;
-      height = window.innerHeight;
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
-      canvas.width = Math.round(width * dpr);
-      canvas.height = Math.round(height * dpr);
-      canvas.style.width = `${width}px`;
-      canvas.style.height = `${height}px`;
-      context.setTransform(dpr, 0, 0, dpr, 0, 0);
+    let animId: number;
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
+
+    // Node count and distance thresholds
+    const nodeCount = isMobile ? 24 : 65;
+    const maxDistance = isMobile ? 100 : 150;
+
+    interface Node {
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      radius: number;
+      alpha: number;
+      baseRadius: number;
+    }
+
+    const nodes: Node[] = Array.from({ length: nodeCount }, () => {
+      const r = Math.random() * 1.6 + 1.2;
+      return {
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.35,
+        vy: (Math.random() - 0.5) * 0.35,
+        radius: r,
+        baseRadius: r,
+        alpha: Math.random() * 0.4 + 0.5,
+      };
+    });
+
+    const handleResize = () => {
+      if (!canvas) return;
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
     };
 
-    const movePointer = (event: MouseEvent) => {
-      pointerRef.current.x = event.clientX;
-      pointerRef.current.y = event.clientY;
-    };
-    const leavePointer = () => {
-      pointerRef.current.x = -1000;
-      pointerRef.current.y = -1000;
+    const handleMouseMove = (e: MouseEvent) => {
+      mouseRef.current.targetX = e.clientX;
+      mouseRef.current.targetY = e.clientY;
     };
 
-    const render = () => {
-      context.clearRect(0, 0, width, height);
-      const pointer = pointerRef.current;
+    const handleClick = (e: MouseEvent) => {
+      if (prefersReducedMotion) return;
+      ripplesRef.current.push({
+        x: e.clientX,
+        y: e.clientY,
+        radius: 10,
+        maxRadius: 220,
+        alpha: 0.5,
+      });
+    };
 
+    window.addEventListener("resize", handleResize);
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("click", handleClick);
+
+    mouseRef.current.targetX = width / 2;
+    mouseRef.current.targetY = height / 3;
+
+    function render() {
+      if (!ctx) return;
+      ctx.clearRect(0, 0, width, height);
+
+      // Smooth lerp mouse tracking
+      const mouse = mouseRef.current;
+      mouse.x += (mouse.targetX - mouse.x) * 0.08;
+      mouse.y += (mouse.targetY - mouse.y) * 0.08;
+
+      // Render Click Ripples
+      const ripples = ripplesRef.current;
+      for (let r = ripples.length - 1; r >= 0; r--) {
+        const rip = ripples[r];
+        rip.radius += 4;
+        rip.alpha *= 0.96;
+
+        ctx.beginPath();
+        ctx.arc(rip.x, rip.y, rip.radius, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(255, 255, 255, ${rip.alpha * 0.3})`;
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        if (rip.radius >= rip.maxRadius || rip.alpha < 0.02) {
+          ripples.splice(r, 1);
+        }
+      }
+
+      // Spotlight Glow behind cursor
+      if (mouse.x > 0 && mouse.y > 0 && !isMobile) {
+        const glow = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 650);
+        glow.addColorStop(0, "rgba(255, 255, 255, 0.12)");
+        glow.addColorStop(0.4, "rgba(255, 255, 255, 0.035)");
+        glow.addColorStop(1, "transparent");
+        ctx.fillStyle = glow;
+        ctx.fillRect(0, 0, width, height);
+      }
+
+      // Render Nodes & Dynamic Interactive Connections
       for (let i = 0; i < nodes.length; i++) {
         const node = nodes[i];
 
-        if (!reducedMotion) {
+        if (!prefersReducedMotion) {
           node.x += node.vx;
           node.y += node.vy;
-          if (node.x < -10 || node.x > width + 10) node.vx *= -1;
-          if (node.y < -10 || node.y > height + 10) node.vy *= -1;
 
-          const dx = pointer.x - node.x;
-          const dy = pointer.y - node.y;
-          const distance = Math.hypot(dx, dy);
-          if (distance > 1 && distance < pointerRadius) {
-            const force = (1 - distance / pointerRadius) * 0.018 * node.depth;
-            node.vx += dx * force;
-            node.vy += dy * force;
+          if (node.x < 0 || node.x > width) node.vx *= -1;
+          if (node.y < 0 || node.y > height) node.vy *= -1;
+
+          // Mouse Repulsion & Glow Effect
+          const dx = node.x - mouse.x;
+          const dy = node.y - mouse.y;
+          const mouseDist = Math.sqrt(dx * dx + dy * dy);
+
+          if (mouseDist < 180 && mouseDist > 0) {
+            const force = (1 - mouseDist / 180) * 1.8;
+            node.x += (dx / mouseDist) * force;
+            node.y += (dy / mouseDist) * force;
+
+            // Connect mouse to nearby nodes
+            if (!isMobile) {
+              const mouseLineAlpha = (1 - mouseDist / 180) * 0.4;
+              ctx.beginPath();
+              ctx.moveTo(mouse.x, mouse.y);
+              ctx.lineTo(node.x, node.y);
+              ctx.strokeStyle = `rgba(255, 255, 255, ${mouseLineAlpha})`;
+              ctx.lineWidth = 1;
+              ctx.stroke();
+            }
           }
-          node.vx *= 0.998;
-          node.vy *= 0.998;
-          const speed = Math.hypot(node.vx, node.vy);
-          if (speed > 0.42) {
-            node.vx = (node.vx / speed) * 0.42;
-            node.vy = (node.vy / speed) * 0.42;
+
+          // Ripple Physics Interaction
+          for (let r = 0; r < ripples.length; r++) {
+            const rip = ripples[r];
+            const rdx = node.x - rip.x;
+            const rdy = node.y - rip.y;
+            const rDist = Math.sqrt(rdx * rdx + rdy * rdy);
+
+            if (Math.abs(rDist - rip.radius) < 30 && rDist > 0) {
+              node.x += (rdx / rDist) * 2;
+              node.y += (rdy / rDist) * 2;
+            }
           }
         }
 
-        context.beginPath();
-        context.arc(node.x, node.y, node.radius * node.depth, 0, Math.PI * 2);
-        context.fillStyle = `rgba(238, 244, 255, ${0.42 + node.depth * 0.42})`;
-        context.shadowBlur = 8;
-        context.shadowColor = "rgba(235, 243, 255, 0.62)";
-        context.fill();
-        context.shadowBlur = 0;
+        // Draw node
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${node.alpha * 0.75})`;
+        ctx.fill();
 
+        // Connect node-to-node
         for (let j = i + 1; j < nodes.length; j++) {
           const other = nodes[j];
-          const distance = Math.hypot(other.x - node.x, other.y - node.y);
-          if (distance >= linkDistance) continue;
-          const alpha = (1 - distance / linkDistance) * 0.34 * Math.min(node.depth, other.depth);
-          context.beginPath();
-          context.moveTo(node.x, node.y);
-          context.lineTo(other.x, other.y);
-          context.strokeStyle = `rgba(222, 232, 248, ${alpha})`;
-          context.lineWidth = 0.7;
-          context.stroke();
-        }
+          const ldx = other.x - node.x;
+          const ldy = other.y - node.y;
+          const dist = Math.sqrt(ldx * ldx + ldy * ldy);
 
-        if (pointerRadius && pointer.x > 0) {
-          const distance = Math.hypot(pointer.x - node.x, pointer.y - node.y);
-          if (distance < pointerRadius) {
-            context.beginPath();
-            context.moveTo(pointer.x, pointer.y);
-            context.lineTo(node.x, node.y);
-            context.strokeStyle = `rgba(245, 248, 255, ${(1 - distance / pointerRadius) * 0.48})`;
-            context.lineWidth = 0.75;
-            context.stroke();
+          if (dist < maxDistance) {
+            const lineAlpha = (1 - dist / maxDistance) * 0.32;
+            ctx.beginPath();
+            ctx.moveTo(node.x, node.y);
+            ctx.lineTo(other.x, other.y);
+            ctx.strokeStyle = `rgba(255, 255, 255, ${lineAlpha})`;
+            ctx.lineWidth = 0.85;
+            ctx.stroke();
           }
         }
       }
 
-      if (!reducedMotion && running) frame = window.requestAnimationFrame(render);
-    };
+      if (!prefersReducedMotion) {
+        animId = requestAnimationFrame(render);
+      }
+    }
 
-    const start = () => {
-      if (running || document.hidden || reducedMotion) return;
-      running = true;
-      frame = window.requestAnimationFrame(render);
-    };
-    const stop = () => {
-      running = false;
-      if (frame) window.cancelAnimationFrame(frame);
-    };
-    const handleVisibility = () => {
-      if (document.hidden) stop();
-      else if (reducedMotion) render();
-      else start();
-    };
-
-    resize();
-    if (reducedMotion) render();
-    else start();
-
-    window.addEventListener("resize", resize);
-    window.addEventListener("mousemove", movePointer, { passive: true });
-    window.addEventListener("blur", leavePointer);
-    document.addEventListener("visibilitychange", handleVisibility);
+    render();
 
     return () => {
-      stop();
-      window.removeEventListener("resize", resize);
-      window.removeEventListener("mousemove", movePointer);
-      window.removeEventListener("blur", leavePointer);
-      document.removeEventListener("visibilitychange", handleVisibility);
+      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("click", handleClick);
+      if (animId) cancelAnimationFrame(animId);
     };
   }, []);
 
   return (
-    <div className="pointer-events-none fixed inset-0 z-[1] overflow-hidden" aria-hidden="true">
-      <canvas ref={canvasRef} className="absolute inset-0" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_35%,rgba(255,255,255,0.025),transparent_68%)]" />
+    <div className="fixed inset-0 pointer-events-none z-[1] overflow-hidden">
+      {/* Interactive Neural Canvas */}
+      <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
+
+      {/* SVG Film Grain Noise Overlay */}
+      <svg className="absolute inset-0 w-full h-full opacity-[0.045] mix-blend-overlay">
+        <filter id="neuralNoiseFilter">
+          <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" stitchTiles="stitch" />
+        </filter>
+        <rect width="100%" height="100%" filter="url(#neuralNoiseFilter)" />
+      </svg>
     </div>
   );
 }
