@@ -20,11 +20,12 @@ type Project = {
   eyebrow: string;
   summary: string;
   description: string;
-  image: string;
+  image?: string;
   stack: string[];
   capabilities: string[];
-  github: string;
+  github?: string;
   live?: string;
+  status?: "upcoming";
   accent: string;
 };
 
@@ -64,6 +65,22 @@ const projects: Project[] = [
     ],
     github: "https://github.com/faheem231/portfolio",
     accent: "75, 160, 255",
+  },
+  {
+    number: "03",
+    name: "Coming Soon",
+    eyebrow: "NEXT EXPERIMENT / IN DEVELOPMENT",
+    summary: "The next build is taking shape. Stay tuned.",
+    description:
+      "A new project is currently in the works. The concept, experiments and implementation are still evolving — details will be shared when it is ready.",
+    stack: ["Research", "Experimentation", "AI / ML"],
+    capabilities: [
+      "Currently exploring ideas and technical directions",
+      "Building and testing the core concept",
+      "More details will be revealed soon",
+    ],
+    accent: "130, 150, 255",
+    status: "upcoming",
   },
 ];
 
@@ -126,13 +143,23 @@ function ProjectCard({
         className="absolute inset-0 z-20 cursor-pointer"
       />
       <div className="project-card-image absolute inset-0">
-        <img
-          src={project.image}
-          alt={`${project.name} project preview`}
-          loading={index === 0 ? "eager" : "lazy"}
-          draggable={false}
-          className="h-full w-full object-cover object-top"
-        />
+        {project.image ? (
+          <img
+            src={project.image}
+            alt={`${project.name} project preview`}
+            loading={index === 0 ? "eager" : "lazy"}
+            draggable={false}
+            className="h-full w-full object-cover object-top"
+          />
+        ) : (
+          <div className="upcoming-project-art absolute inset-0 flex items-center justify-center overflow-hidden">
+            <div className="upcoming-orbit upcoming-orbit-one" />
+            <div className="upcoming-orbit upcoming-orbit-two" />
+            <div className="upcoming-orbit upcoming-orbit-three" />
+            <div className="upcoming-core"><span /></div>
+            <div className="absolute bottom-10 font-mono text-[9px] tracking-[0.45em] text-white/35">SIGNAL DETECTED / BUILD IN PROGRESS</div>
+          </div>
+        )}
       </div>
       <div className="project-card-scrim absolute inset-0" />
       <div className="project-card-glow pointer-events-none absolute inset-0" />
@@ -143,8 +170,9 @@ function ProjectCard({
             <span className="font-mono text-[10px] tracking-[0.32em] text-white/55">
               SELECTED PROJECT / {project.number}
             </span>
-            <p className="mt-3 text-[10px] font-semibold tracking-[0.24em] text-white/65">
+            <p className="mt-3 flex flex-wrap items-center gap-2 text-[10px] font-semibold tracking-[0.24em] text-white/65">
               {project.eyebrow}
+              {project.status === "upcoming" && <span className="rounded-full border border-blue-300/30 bg-blue-300/10 px-2 py-1 text-[8px] tracking-[0.16em] text-blue-200">COMING SOON</span>}
             </p>
           </div>
           <span className="project-open-icon flex h-11 w-11 items-center justify-center rounded-full border border-white/25 bg-black/25 text-white backdrop-blur-xl transition-all duration-300">
@@ -258,13 +286,26 @@ function ProjectDetail({
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
           >
-            <motion.img
-              src={project.image}
-              alt={`${project.name} interface preview`}
-              className="relative z-0 h-full max-h-[560px] w-full object-contain p-3 sm:p-5"
-              whileHover={{ scale: 1.035 }}
-              transition={{ duration: 0.7, ease: [0.2, 0.8, 0.2, 1] }}
-            />
+            {project.image ? (
+              <motion.img
+                src={project.image}
+                alt={`${project.name} interface preview`}
+                className="relative z-0 h-full max-h-[560px] w-full object-contain p-3 sm:p-5"
+                whileHover={{ scale: 1.035 }}
+                transition={{ duration: 0.7, ease: [0.2, 0.8, 0.2, 1] }}
+              />
+            ) : (
+              <div className="upcoming-project-art relative z-0 flex min-h-[340px] w-full items-center justify-center">
+                <div className="upcoming-orbit upcoming-orbit-one" />
+                <div className="upcoming-orbit upcoming-orbit-two" />
+                <div className="upcoming-orbit upcoming-orbit-three" />
+                <div className="upcoming-core"><span /></div>
+                <div className="absolute bottom-8 text-center">
+                  <p className="font-mono text-[10px] tracking-[0.35em] text-blue-200/75">TRANSMISSION IN PROGRESS</p>
+                  <p className="mt-2 text-sm text-white/45">The next build will be revealed here.</p>
+                </div>
+              </div>
+            )}
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,rgba(70,110,255,0.12),transparent_58%)]" />
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#090a0e]/55 via-transparent to-transparent" />
             <div className="absolute bottom-5 left-5 flex items-center gap-2 rounded-full border border-white/15 bg-black/45 px-3 py-2 font-mono text-[9px] tracking-[0.2em] text-white/70 backdrop-blur-xl">
@@ -334,16 +375,23 @@ function ProjectDetail({
             </div>
 
             <div className="mt-10 flex flex-wrap items-center gap-3 border-t border-white/10 pt-6">
-              <a
-                href={project.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-xs font-semibold text-black transition hover:bg-white/85"
-              >
-                <Github size={15} />
-                View source
-                <ExternalLink size={13} />
-              </a>
+{project.github ? (
+                <a
+                  href={project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-xs font-semibold text-black transition hover:bg-white/85"
+                >
+                  <Github size={15} />
+                  View source
+                  <ExternalLink size={13} />
+                </a>
+              ) : (
+                <span className="inline-flex items-center gap-2 rounded-full border border-blue-300/25 bg-blue-300/[0.08] px-5 py-3 text-xs font-semibold text-blue-100/80">
+                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-blue-300" />
+                  In development · Stay tuned
+                </span>
+              )}
               {project.live && (
                 <a
                   href={project.live}
@@ -552,6 +600,42 @@ export default function ProjectsExperience() {
           border-radius: 999px;
           background: rgba(255,255,255,.2);
         }
+        .upcoming-project-art {
+          background:
+            radial-gradient(circle at 50% 50%, rgba(87,112,255,.18), transparent 28%),
+            radial-gradient(circle at 50% 50%, rgba(255,255,255,.035), transparent 60%),
+            #07090f;
+        }
+        .upcoming-orbit {
+          position: absolute;
+          width: min(58vw, 360px);
+          aspect-ratio: 1;
+          border: 1px solid rgba(170,190,255,.2);
+          border-radius: 50%;
+          box-shadow: 0 0 35px rgba(90,120,255,.08), inset 0 0 35px rgba(90,120,255,.05);
+        }
+        .upcoming-orbit-one { transform: rotateX(68deg) rotateZ(0deg); animation: upcoming-orbit 16s linear infinite; }
+        .upcoming-orbit-two { transform: rotateX(68deg) rotateZ(60deg); animation: upcoming-orbit 22s linear infinite reverse; }
+        .upcoming-orbit-three { transform: rotateY(68deg) rotateZ(-35deg); animation: upcoming-orbit 19s linear infinite; }
+        .upcoming-core {
+          display: grid;
+          place-items: center;
+          width: 92px;
+          aspect-ratio: 1;
+          border-radius: 50%;
+          background: radial-gradient(circle at 35% 30%, #dbeafe, #7189ff 22%, #25366f 55%, #080b18 78%);
+          box-shadow: 0 0 35px rgba(105,135,255,.45), 0 0 100px rgba(75,105,255,.2);
+          animation: upcoming-pulse 3.5s ease-in-out infinite;
+        }
+        .upcoming-core span {
+          width: 32%;
+          aspect-ratio: 1;
+          border-radius: 50%;
+          background: #fff;
+          box-shadow: 0 0 22px 8px rgba(190,210,255,.65);
+        }
+        @keyframes upcoming-orbit { to { rotate: 360deg; } }
+        @keyframes upcoming-pulse { 50% { scale: 1.12; filter: brightness(1.25); } }
         .project-detail-preview { isolation: isolate; }
         .project-detail-preview img { will-change: transform; }
         .project-experience-shell {
