@@ -395,7 +395,7 @@ export default function ShowcaseSection() {
             style={{ fontSize: "clamp(32px,6vw,80px)" }}
           >
             <span className="inline-block bg-gradient-to-b from-white via-white to-white/45 bg-clip-text text-transparent">
-              Portfolio Showcase
+              {active === "projects" ? "Portfolio Showcase" : active === "certificates" ? "Certifications" : "Tech Stack"}
             </span>
           </h1>
         </div>
