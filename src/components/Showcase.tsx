@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from "react";
+import ProjectsExperience from "./ProjectsExperience";
 
 const techStack = [
   { name: "Python", icon: "https://cdn.simpleicons.org/python/3776AB", color: "#3776AB" },
@@ -30,30 +31,7 @@ const projects = [
   },
 ];
 
-const certificates = [
-  {
-    title: "GDG On Campus Cepheus Hackathon",
-    tech: `GDG On Campus
-Cepheus Hackathon
 
-📅 April 22–23, 2026
-📍 Atria Institute of Technology
-
-Participant`,
-    thumbnail: "./assets/Cepheus.png",
-  },
-  {
-    title: "Infosys Springboard Basics of Python",
-    tech: `Infosys Springboard
-
-Basics of Python
-
-📅 June 4, 2026
-
-Course Completion Certificate`,
-    thumbnail: "./assets/python.jpeg",
-  },
-];
 
 const GithubIcon = () => (
   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -61,22 +39,9 @@ const GithubIcon = () => (
   </svg>
 );
 
-const DownloadIcon = () => (
-  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-    <path d="M12 16l4-5h-3V4h-2v7H8l4 5zm-8 4h16v-2H4v2z" />
-  </svg>
-);
 
-const Spinner = () => (
-  <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
-    <path
-      d="M12 2v4m0 12v4m10-10h-4M6 12H2"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-    />
-  </svg>
-);
+
+
 
 function ProjectCard({ item }: { item: typeof projects[0] }) {
   return (
@@ -110,64 +75,6 @@ function ProjectCard({ item }: { item: typeof projects[0] }) {
         >
           <GithubIcon />
         </a>
-      </div>
-    </div>
-  );
-}
-
-function CertCard({ item }: { item: typeof certificates[0] }) {
-  const [downloading, setDownloading] = useState(false);
-
-  const handleDownload = async () => {
-    setDownloading(true);
-    try {
-      const response = await fetch(item.thumbnail, { mode: "cors" });
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `${item.title}.jpg`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
-    } catch (err) {
-      console.error("Download failed:", err);
-    }
-    setTimeout(() => setDownloading(false), 500);
-  };
-
-  return (
-    <div
-      className="group relative rounded-2xl border border-white/15 overflow-hidden bg-white/[0.06]
-      hover:border-white/25 transition-all duration-500
-      hover:-translate-y-2 hover:shadow-2xl hover:shadow-white/10 backdrop-blur-md"
-      style={{ backdropFilter: "blur(20px)" }}
-    >
-      <div className="relative h-48 overflow-hidden bg-white/5">
-        <img
-          src={item.thumbnail}
-          alt={item.title}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-        <div className="absolute bottom-4 left-4 right-4">
-          <p className="text-white font-semibold text-sm leading-snug line-clamp-2">{item.title}</p>
-        </div>
-      </div>
-      <div className="px-5 py-4 flex items-center justify-between">
-        <span className="text-[10px] uppercase tracking-[0.25em] text-white/40 font-mono">
-          {item.tech}
-        </span>
-        <button
-          onClick={handleDownload}
-          className="flex items-center justify-center w-8 h-8 rounded-full 
-          bg-white/5 border border-white/15 text-white/60 
-          hover:bg-white/10 hover:text-white hover:border-white/30 
-          transition-all duration-200 active:scale-95"
-        >
-          {downloading ? <Spinner /> : <DownloadIcon />}
-        </button>
       </div>
     </div>
   );
@@ -464,7 +371,7 @@ export default function ShowcaseSection() {
         : "calc(66.666% + 0px)";
 
   return (
-    <section className="relative w-full min-h-[85vh] md:min-h-screen bg-black overflow-hidden text-white px-4 sm:px-8 md:px-16 lg:px-24 py-0 md:py-12 -mt-16 sm:mt-0 md:mt-12">
+    <section className="relative w-full min-h-[85vh] md:min-h-screen bg-transparent overflow-hidden text-white px-4 sm:px-8 md:px-16 lg:px-24 py-0 md:py-12 -mt-16 sm:mt-0 md:mt-12">
       <div className="relative z-10 flex flex-col items-center max-w-6xl mx-auto">
         {/* Label */}
         <div className="relative flex items-center justify-center gap-4 mb-5 opacity-0 animate-[fadeSlideDown_0.8s_ease_forwards]">
@@ -488,7 +395,7 @@ export default function ShowcaseSection() {
             style={{ fontSize: "clamp(32px,6vw,80px)" }}
           >
             <span className="inline-block bg-gradient-to-b from-white via-white to-white/45 bg-clip-text text-transparent">
-              Portfolio Showcase
+              {active === "projects" ? "Portfolio Showcase" : active === "certificates" ? "Certifications" : "Tech Stack"}
             </span>
           </h1>
         </div>
@@ -532,31 +439,33 @@ export default function ShowcaseSection() {
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
-          {active === "projects" && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
-              {projects.map((item, i) => (
-                <div
-                  key={i}
-                  className="opacity-0"
-                  style={{ animation: `fadeSlideUp 0.5s ease ${i * 0.08}s forwards` }}
-                >
-                  <ProjectCard item={item} />
-                </div>
-              ))}
-            </div>
-          )}
+          {active === "projects" && <ProjectsExperience />}
 
           {active === "certificates" && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
-              {certificates.map((item, i) => (
-                <div
-                  key={i}
-                  className="opacity-0"
-                  style={{ animation: `fadeSlideUp 0.5s ease ${i * 0.08}s forwards` }}
-                >
-                  <CertCard item={item} />
+            <div className="certificate-coming-card group relative mx-auto grid min-h-[430px] w-full max-w-[1120px] overflow-hidden rounded-[26px] border border-white/15 bg-[#090a0e] opacity-0 shadow-[0_22px_70px_rgba(0,0,0,.35)] animate-[fadeSlideUp_0.6s_ease_forwards] md:grid-cols-[1.05fr_.95fr]">
+              <div className="upcoming-project-art relative flex min-h-[300px] items-center justify-center overflow-hidden border-b border-white/10 md:border-b-0 md:border-r">
+                <div className="upcoming-orbit upcoming-orbit-one" />
+                <div className="upcoming-orbit upcoming-orbit-two" />
+                <div className="upcoming-orbit upcoming-orbit-three" />
+                <div className="upcoming-core"><span /></div>
+                <div className="absolute bottom-7 left-7 font-mono text-[9px] tracking-[0.32em] text-white/35">CREDENTIAL ARCHIVE / 2026</div>
+                <div className="absolute right-6 top-6 rounded-full border border-white/15 bg-black/40 px-3 py-2 font-mono text-[9px] tracking-[0.18em] text-white/55 backdrop-blur-xl">01 / 01</div>
+              </div>
+              <div className="relative z-10 flex flex-col justify-center p-7 sm:p-10 md:p-12">
+                <p className="mb-5 flex items-center gap-3 font-mono text-[10px] tracking-[0.3em] text-blue-200/65">
+                  <span className="h-px w-7 bg-blue-200/50" /> LEARNING IN PROGRESS
+                </p>
+                <h2 className="text-4xl font-semibold tracking-[-0.06em] text-white sm:text-5xl">New credentials<span className="text-white/35">.</span></h2>
+                <p className="mt-5 max-w-md text-sm leading-7 text-white/55">
+                  The next chapter is underway. New certifications and learning milestones will be added here as they are completed.
+                </p>
+                <div className="mt-9 flex flex-wrap items-center gap-3">
+                  <span className="inline-flex items-center gap-2 rounded-full border border-blue-300/25 bg-blue-300/[0.08] px-5 py-3 text-[10px] font-semibold tracking-[0.2em] text-blue-100/80">
+                    <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-blue-300" /> COMING SOON
+                  </span>
+                  <span className="font-mono text-[9px] tracking-[0.16em] text-white/30">UPDATED AS I LEARN</span>
                 </div>
-              ))}
+              </div>
             </div>
           )}
 
