@@ -53,17 +53,6 @@ export default function App() {
     return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    setDisplayed("");
-    let i = 0;
-    function type() {
-      setDisplayed(text.slice(0, i + 1));
-      i++;
-      if (i < text.length) setTimeout(type, 200);
-    }
-    type();
-  }, []);
-
   return (
     <Routes>
       <Route path="/" element={
