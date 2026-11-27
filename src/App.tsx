@@ -1,6 +1,6 @@
 import { ArrowUpRight, Menu, X } from "lucide-react";
 import { lazy, Suspense, useEffect, useState } from "react";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 import WelcomeScreen from "@/components/WelcomeScreen";
 import AIEngineerSection from "@/components/AIEngineerSection";
@@ -13,25 +13,15 @@ import About from "./pages/About";
 const HeroAIWorkspace = lazy(() => import("@/components/HeroAIWorkspace"));
 
 
-const logos = ["FAHEEM", "STUDENT", "AI", "ENGINEER"];
+const logos = ["PYTHON", "MACHINE LEARNING", "DEEP LEARNING", "NLP", "GENERATIVE AI"];
 
 export default function App() {
   const [showWelcome, setShowWelcome] = useState(true);
   const [time, setTime] = useState("");
   const [mobileMenu, setMobileMenu] = useState(false);
 
-  const text = "FAHEEM";
-  const [displayed, setDisplayed] = useState("");
-  const [colorMode, setColorMode] = useState(0);
-
-  const colors = [
-    "bg-gradient-to-b from-white via-gray-200 via-gray-500 to-black text-transparent bg-clip-text",
-    "text-white",
-    "bg-gradient-to-b from-black via-gray-500 via-gray-200 to-white text-transparent bg-clip-text",
-  ];
-
   useEffect(() => {
-    const timer = setTimeout(() => setShowWelcome(false), 5000);
+    const timer = setTimeout(() => setShowWelcome(false), 3000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -219,58 +209,74 @@ export default function App() {
 
           <section
             id="Home"
-            className="relative w-full h-screen min-h-[640px] overflow-hidden bg-black"
+            className="hero-cinematic relative w-full overflow-hidden bg-black"
           >
-            <Suspense fallback={<div className="hero-ai-workspace-fallback" aria-hidden="true" />}>
-              <HeroAIWorkspace />
-            </Suspense>
+            <div className="hero-cinematic-light" aria-hidden="true" />
+            <div className="hero-cinematic-grain" aria-hidden="true" />
 
-            <div className="relative z-10 w-full h-full flex flex-col justify-between px-6 md:px-12 pt-24 pb-10">
-              <h1
-                onClick={() => setColorMode((prev) => (prev + 1) % colors.length)}
-                className={`font-display uppercase leading-[0.85] tracking-[-0.03em] text-[22vw] md:text-[14vw] lg:text-[13rem] cursor-pointer transition-all duration-300 ${colors[colorMode]}`}
-              >
-                {displayed || "\u00A0"}
+            <div className="hero-content">
+              <div className="hero-topline">
+                <motion.span initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.15 }}>
+                  PORTFOLIO / 2026
+                </motion.span>
+                <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.35 }}>
+                  AI &amp; MACHINE LEARNING
+                </motion.span>
+              </div>
+
+              <h1 className="hero-name" aria-label="Mohammed Faheem">
+                <span className="hero-name-word" aria-hidden="true">
+                  {Array.from("MOHAMMED").map((letter, index) => (
+                    <motion.span key={"m-" + index} initial={{ opacity: 0, y: 86, rotateX: -65, filter: "blur(12px)" }} animate={{ opacity: 1, y: 0, rotateX: 0, filter: "blur(0px)" }} transition={{ duration: 0.9, delay: 0.28 + index * 0.055, ease: [0.22, 1, 0.36, 1] }}>
+                      {letter}
+                    </motion.span>
+                  ))}
+                </span>
+                <span className="hero-name-word hero-name-second" aria-hidden="true">
+                  {Array.from("FAHEEM").map((letter, index) => (
+                    <motion.span key={"f-" + index} initial={{ opacity: 0, y: 86, rotateX: -65, filter: "blur(12px)" }} animate={{ opacity: 1, y: 0, rotateX: 0, filter: "blur(0px)" }} transition={{ duration: 0.9, delay: 0.72 + index * 0.06, ease: [0.22, 1, 0.36, 1] }}>
+                      {letter}
+                    </motion.span>
+                  ))}
+                </span>
               </h1>
 
-              <p className="md:absolute md:top-28 md:right-16
-mt-4 md:mt-0
-text-right
-text-3xl md:text-4xl lg:text-5xl
-leading-[1.05]
-max-w-md
-font-[Poppins] font-bold
-tracking-wide
-text-transparent bg-clip-text
-bg-[length:200%_auto]
-bg-gradient-to-r
-from-white via-white/60 to-white
-animate-[shine_4s_linear_infinite]">
-                Building
+              <motion.div className="hero-headline" initial={{ opacity: 0, y: 28, clipPath: "inset(0 0 100% 0)" }} animate={{ opacity: 1, y: 0, clipPath: "inset(0 0 0% 0)" }} transition={{ duration: 1, delay: 1.35, ease: [0.22, 1, 0.36, 1] }}>
+                BUILDING <em>WHAT&apos;S NEXT.</em>
+              </motion.div>
 
-                <br />
-                Intelligent
-                <br />
-                AI Systems
-                <br />
-                For Tomorrow.
-              </p>
+              <motion.div className="hero-scene-wrap" initial={{ opacity: 0, scale: 0.92, y: 26 }} animate={{ opacity: 1, scale: 1, y: 0 }} transition={{ duration: 1.25, delay: 1.55, ease: [0.22, 1, 0.36, 1] }}>
+                <Suspense fallback={<div className="hero-scene-fallback" aria-hidden="true" />}>
+                  <HeroAIWorkspace />
+                </Suspense>
+              </motion.div>
 
-              <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mt-auto">
-                <p className="relative text-sm sm:text-base lg:text-xl
-    leading-relaxed max-w-md
-    font-[Poppins] font-medium
-    tracking-wide
-    text-transparent bg-clip-text
-    bg-[length:200%_auto]
-    bg-gradient-to-r
-    from-white via-white/60 to-white
-    animate-[shine_4s_linear_infinite]">
-                  AI & Machine Learning Student building intelligent applications with Python, Machine Learning, Deep Learning, NLP and Generative AI.                </p>
+              <div className="hero-bottom">
+                <motion.div className="hero-intro" initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, delay: 2.1, ease: [0.22, 1, 0.36, 1] }}>
+                  <span className="hero-intro-label">THE MINDSET</span>
+                  <p>
+                    AI &amp; Machine Learning student exploring how intelligent
+                    systems can solve real problems — from Python and machine
+                    learning to deep learning, NLP and generative AI.
+                  </p>
+                </motion.div>
 
+                <motion.div className="hero-actions" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 2.35 }}>
+                  <button onClick={() => document.getElementById("showcase")?.scrollIntoView({ behavior: "smooth" })} className="hero-cta hero-cta-primary">
+                    EXPLORE MY WORK <ArrowUpRight size={17} />
+                  </button>
+                  <button onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })} className="hero-cta hero-cta-secondary">
+                    LET&apos;S CONNECT <ArrowUpRight size={17} />
+                  </button>
+                </motion.div>
 
+                <motion.div className="hero-scroll-cue" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.8, duration: 0.8 }}>
+                  <span className="hero-scroll-line" />
+                  <span>SCROLL TO EXPLORE</span>
+                </motion.div>
               </div>
             </div>
+            <span className="hero-frame-index">01 — INTRODUCTION</span>
           </section>
 
           <div className="bg-black border-t border-white/10 py-5 overflow-hidden">
@@ -288,57 +294,68 @@ animate-[shine_4s_linear_infinite]">
 
 
           <style>{`
-        @keyframes marquee {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-33.333%); }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-33.333%); } }
+        .animate-marquee { animation: marquee 22s linear infinite; }
+        .hero-cinematic { min-height:max(100svh,790px); isolation:isolate; background:radial-gradient(ellipse at 50% 49%,rgba(15,35,70,.2),transparent 48%),linear-gradient(180deg,#050608 0%,#020306 52%,#05070b 100%); }
+        .hero-cinematic-light { position:absolute; inset:0; z-index:0; pointer-events:none; background:radial-gradient(ellipse at 50% 48%,rgba(40,105,210,.15),transparent 34%),radial-gradient(ellipse at 12% 20%,rgba(255,255,255,.045),transparent 30%),linear-gradient(110deg,transparent 15%,rgba(90,145,230,.045) 48%,transparent 78%); animation:hero-light-drift 12s ease-in-out infinite alternate; }
+        .hero-cinematic-grain { position:absolute; inset:0; z-index:1; pointer-events:none; opacity:.12; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.28'/%3E%3C/svg%3E"); mix-blend-mode:screen; }
+        .hero-content { position:relative; z-index:10; max-width:1600px; min-height:max(100svh,790px); margin:0 auto; padding:126px clamp(22px,5.2vw,88px) 34px; display:flex; flex-direction:column; }
+        .hero-topline { display:flex; justify-content:space-between; align-items:center; gap:16px; color:rgba(211,222,241,.52); font:9px/1.2 ui-monospace,SFMono-Regular,monospace; letter-spacing:.28em; }
+        .hero-name { display:flex; align-items:baseline; justify-content:space-between; gap:.06em; width:100%; margin:30px 0 12px; overflow:visible; color:#dce2eb; font-family:var(--font-display),Impact,sans-serif; font-size:clamp(4.2rem,10.1vw,9.4rem); font-weight:900; line-height:.82; letter-spacing:-.075em; white-space:nowrap; perspective:800px; user-select:none; }
+        .hero-name-word { display:inline-flex; background:linear-gradient(180deg,#fff 0%,#d9dfe8 34%,#7f899b 70%,#202633 100%); -webkit-background-clip:text; background-clip:text; color:transparent; filter:drop-shadow(0 12px 32px rgba(125,165,230,.1)); }
+        .hero-name-word span { display:inline-block; }
+        .hero-name-second { margin-left:auto; }
+        .hero-headline { align-self:center; margin-top:24px; color:#e8edf5; font:600 clamp(1.1rem,2.35vw,2rem)/1.1 Inter,system-ui,sans-serif; letter-spacing:.19em; text-align:center; }
+        .hero-headline em { color:#86b5ff; font-style:normal; text-shadow:0 0 24px rgba(74,139,255,.42); }
+        .hero-scene-wrap { width:100%; margin:auto 0 0; }
+        .hero-scene { position:relative; width:min(100%,1040px); height:clamp(220px,31vh,310px); margin:0 auto; overflow:visible; isolation:isolate; }
+        .hero-scene canvas { position:absolute!important; inset:0; width:100%!important; height:100%!important; z-index:2; }
+        .hero-scene-aura { position:absolute; inset:8% 18%; border-radius:50%; pointer-events:none; background:radial-gradient(ellipse,rgba(45,111,222,.22),rgba(20,55,110,.09) 44%,transparent 73%); filter:blur(32px); animation:hero-aura 7s ease-in-out infinite; }
+        .hero-glass-label { position:absolute; z-index:3; display:flex; flex-direction:column; gap:7px; min-width:148px; padding:13px 15px; border:1px solid rgba(186,207,240,.18); border-radius:11px; color:#dce7f8; background:linear-gradient(140deg,rgba(18,29,47,.68),rgba(5,9,16,.48)); box-shadow:0 12px 38px rgba(0,0,0,.22),inset 0 1px rgba(255,255,255,.08); backdrop-filter:blur(16px); pointer-events:none; }
+        .hero-glass-label-left { left:2%; top:34%; }
+        .hero-glass-label-right { right:2%; bottom:22%; }
+        .hero-glass-kicker,.hero-glass-meta { color:rgba(194,213,243,.48); font:7px/1.2 ui-monospace,monospace; letter-spacing:.2em; }
+        .hero-glass-label strong { font:600 9px/1.2 ui-monospace,monospace; letter-spacing:.1em; white-space:nowrap; }
+        .hero-glass-label strong i { display:inline-block; width:5px; height:5px; margin:0 5px 1px 0; border-radius:50%; background:#83b3ff; box-shadow:0 0 10px #83b3ff; }
+        .hero-bottom { display:grid; grid-template-columns:minmax(260px,1fr) auto auto; align-items:end; gap:clamp(24px,4vw,64px); margin-top:8px; padding-top:14px; }
+        .hero-intro { max-width:510px; }
+        .hero-intro-label { display:block; margin-bottom:10px; color:#82b3ff; font:8px/1.2 ui-monospace,monospace; letter-spacing:.26em; }
+        .hero-intro p { margin:0; color:rgba(224,231,242,.72); font:400 clamp(.85rem,1.1vw,1rem)/1.8 Inter,system-ui,sans-serif; letter-spacing:.015em; }
+        .hero-actions { display:flex; align-items:center; gap:11px; }
+        .hero-cta { display:inline-flex; align-items:center; justify-content:center; gap:12px; min-height:48px; padding:0 19px; border-radius:999px; cursor:pointer; font:600 9px/1 ui-monospace,monospace; letter-spacing:.14em; transition:transform .3s ease,border-color .3s ease,background .3s ease,box-shadow .3s ease; }
+        .hero-cta:hover { transform:translateY(-4px); }
+        .hero-cta-primary { color:#07101d; border:1px solid #c7dcff; background:linear-gradient(110deg,#e9f2ff,#8db9ff); box-shadow:0 0 28px rgba(82,145,255,.2); }
+        .hero-cta-primary:hover { box-shadow:0 0 38px rgba(82,145,255,.42); }
+        .hero-cta-secondary { color:#dce7f8; border:1px solid rgba(192,211,243,.23); background:rgba(255,255,255,.035); }
+        .hero-cta-secondary:hover { border-color:rgba(145,188,255,.65); background:rgba(75,125,205,.1); }
+        .hero-scroll-cue { display:flex; align-items:center; gap:10px; color:rgba(198,213,237,.42); font:7px/1 ui-monospace,monospace; letter-spacing:.2em; white-space:nowrap; }
+        .hero-scroll-line { width:34px; height:1px; background:linear-gradient(90deg,#82b3ff,transparent); animation:hero-line-pulse 2s ease-in-out infinite; }
+        .hero-frame-index { position:absolute; right:clamp(22px,5.2vw,88px); top:52%; color:rgba(195,211,235,.25); font:8px/1 ui-monospace,monospace; letter-spacing:.22em; writing-mode:vertical-rl; }
+        .hero-scene-fallback { width:100%; height:clamp(220px,31vh,310px); }
+        @keyframes hero-aura { 0%,100% { opacity:.55; transform:scale(.94); } 50% { opacity:1; transform:scale(1.06); } }
+        @keyframes hero-light-drift { from { transform:translate3d(-1%,0,0); opacity:.65; } to { transform:translate3d(1%,1%,0); opacity:1; } }
+        @keyframes hero-line-pulse { 50% { opacity:.35; transform:scaleX(.65); transform-origin:left; } }
+        @media(max-width:900px) { .hero-content { padding-left:28px; padding-right:28px; } .hero-name { font-size:clamp(4rem,11vw,7.5rem); } .hero-bottom { grid-template-columns:1fr auto; row-gap:22px; } .hero-scroll-cue { grid-column:1/-1; justify-self:end; } .hero-frame-index { display:none; } }
+        @media(max-width:640px) {
+          .hero-cinematic,.hero-content { min-height:850px; }
+          .hero-content { padding:112px 20px 28px; }
+          .hero-topline { font-size:7px; letter-spacing:.16em; }
+          .hero-name { flex-direction:column; align-items:flex-start; gap:4px; margin:34px 0 14px; font-size:clamp(3.65rem,15.4vw,6.2rem); line-height:.8; }
+          .hero-name-second { margin-left:0; }
+          .hero-headline { align-self:flex-start; margin-top:22px; font-size:clamp(1rem,4.5vw,1.35rem); letter-spacing:.12em; }
+          .hero-scene { height:245px; width:calc(100% + 24px); margin-left:-12px; }
+          .hero-glass-label { min-width:116px; padding:9px 10px; gap:5px; }
+          .hero-glass-label-left { left:1%; top:12%; }
+          .hero-glass-label-right { right:1%; bottom:9%; }
+          .hero-glass-kicker,.hero-glass-meta { font-size:6px; }
+          .hero-glass-label strong { font-size:7px; }
+          .hero-bottom { display:flex; flex-direction:column; align-items:stretch; gap:20px; margin-top:0; }
+          .hero-intro p { font-size:13px; line-height:1.7; max-width:440px; }
+          .hero-actions { flex-wrap:wrap; }
+          .hero-cta { min-height:45px; padding:0 14px; font-size:8px; }
+          .hero-scroll-cue { align-self:flex-end; }
         }
-        .animate-marquee { animation: marquee 10s linear infinite; }
-        .hero-ai-workspace {
-          position:absolute; z-index:1; width:min(59vw,780px); height:270px;
-          right:2.5%; top:64%; transform:translateY(-50%);
-          overflow:visible; isolation:isolate;
-        }
-        .hero-ai-workspace canvas { position:relative; z-index:1; }
-        .ai-workspace-glow {
-          position:absolute; inset:14% 10%; border-radius:50%;
-          background:radial-gradient(ellipse,rgba(62,104,190,.19),rgba(39,61,112,.08) 48%,transparent 75%);
-          filter:blur(30px); pointer-events:none; animation:ai-glow-breathe 6s ease-in-out infinite;
-        }
-        .ai-workspace-panel {
-          width:190px; min-height:126px; box-sizing:border-box; padding:13px 14px;
-          color:#edf3ff; border:1px solid rgba(188,211,255,.25); border-radius:15px;
-          background:linear-gradient(145deg,rgba(23,34,54,.88),rgba(7,11,19,.78));
-          box-shadow:0 16px 45px rgba(0,0,0,.38),inset 0 1px rgba(255,255,255,.09);
-          backdrop-filter:blur(18px); transition:border-color .25s ease,box-shadow .25s ease,background .25s ease;
-          cursor:default; user-select:none;
-        }
-        .ai-workspace-panel.is-active {
-          border-color:var(--panel-accent); background:linear-gradient(145deg,rgba(36,53,82,.96),rgba(8,13,24,.9));
-          box-shadow:0 0 30px color-mix(in srgb,var(--panel-accent) 20%,transparent),0 20px 55px rgba(0,0,0,.45);
-        }
-        .ai-panel-topline { display:flex; justify-content:space-between; color:rgba(205,220,246,.55); font:8px/1.2 ui-monospace,monospace; letter-spacing:.13em; }
-        .ai-panel-heading { display:flex; align-items:center; gap:9px; margin-top:13px; font:600 13px/1.2 Inter,system-ui,sans-serif; }
-        .ai-panel-icon { display:grid; place-items:center; width:29px; height:29px; border-radius:9px; color:var(--panel-accent); background:rgba(154,188,255,.1); border:1px solid rgba(173,202,255,.16); }
-        .ai-panel-code { margin-top:10px; padding:7px 8px; border-radius:7px; color:#c5d8ff; background:rgba(2,6,13,.52); font:9px/1.2 ui-monospace,monospace; white-space:nowrap; }
-        .ai-panel-status { display:flex; align-items:center; gap:6px; margin-top:10px; color:rgba(207,220,242,.53); font:7px/1 ui-monospace,monospace; letter-spacing:.12em; }
-        .ai-status-dot { display:inline-block; width:5px; height:5px; flex:none; border-radius:50%; background:#8eb7ff; box-shadow:0 0 9px #8eb7ff; animation:ai-status-pulse 1.8s ease-in-out infinite; }
-        .ai-panel-spark { margin-left:auto; color:var(--panel-accent); }
-        .ai-workspace-footnote { position:absolute; z-index:2; right:12%; bottom:0; color:rgba(206,220,245,.38); font:8px/1 ui-monospace,monospace; letter-spacing:.2em; pointer-events:none; }
-        .ai-workspace-footnote .ai-status-dot { margin-right:7px; }
-        .hero-ai-workspace-fallback { position:absolute; right:8%; top:64%; width:50vw; height:220px; transform:translateY(-50%); }
-        @keyframes ai-status-pulse { 50% { opacity:.35; } }
-        @keyframes ai-glow-breathe { 0%,100% { opacity:.55; transform:scale(.94); } 50% { opacity:1; transform:scale(1.05); } }
-        @media(max-width:767px) {
-          .hero-ai-workspace { width:100%; height:205px; right:0; top:59%; opacity:.95; }
-          .ai-workspace-panel { width:155px; min-height:112px; padding:10px 11px; border-radius:12px; }
-          .ai-panel-heading { font-size:11px; margin-top:9px; }
-          .ai-panel-code { font-size:8px; margin-top:7px; }
-          .ai-panel-status { margin-top:8px; font-size:6px; }
-          .ai-workspace-footnote { right:10%; bottom:-5px; font-size:6px; }
-        }
-        @media(prefers-reduced-motion:reduce) {
-          .ai-workspace-glow,.ai-status-dot { animation:none!important; }
-        }
+        @media(prefers-reduced-motion:reduce) { .animate-marquee,.hero-scene-aura,.hero-scroll-line,.hero-cinematic-light { animation:none!important; } }
       `}</style>
 
           <section id="about">
