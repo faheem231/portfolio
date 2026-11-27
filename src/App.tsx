@@ -330,7 +330,7 @@ export default function App() {
           .hero-scroll-cue { align-self:flex-end; }
         }
         @media(prefers-reduced-motion:reduce) { .animate-marquee,.hero-scroll-line,.hero-cinematic-light { animation:none!important; } .hero-name-word span { transition:none; } }
-      `}</style>>
+      `}</style>
 
           <section id="about">
             <AIEngineerSection />
